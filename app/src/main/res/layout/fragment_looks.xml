@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".menuFragments.LooksFragment"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/button_add_looks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:onClick="onClick1"
+                android:text="Добавить" />
+
+        </TableRow>
+    </TableLayout>
+
+    <GridView
+        android:id="@+id/clothes_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="3"
+        android:verticalSpacing="3dp"
+        android:horizontalSpacing="3dp"
+        android:stretchMode="columnWidth"
+        android:layout_marginBottom="45dp"/>
+
+</LinearLayout>

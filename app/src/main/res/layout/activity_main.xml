@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/cardview_dark_background"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true">
+
+        <TableRow>
+            <Button
+                android:id="@+id/menu_calendar"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="Change"
+                android:text="Calendar" />
+
+            <Button
+                android:id="@+id/menu_wardrobe"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="Change"
+                android:text="WARDROBE" />
+
+            <Button
+                android:id="@+id/menu_looks"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="Change"
+                android:text="LOOKS" />
+
+            <Button
+                android:id="@+id/menu_profile"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="Change"
+                android:text="MY PROFILE" />
+
+        </TableRow>
+    </TableLayout>
+
+
+</RelativeLayout>

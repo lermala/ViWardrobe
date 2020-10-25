@@ -1,0 +1,36 @@
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:rowCount="2"
+    android:layout_margin="10dp"
+    android:columnCount="2">
+
+    <Button
+        android:text="photo"
+        android:layout_height="100dp"
+        android:layout_rowSpan="2"
+        />
+    <Button android:text="name" />
+    <TextView
+        android:text="email"/>
+
+    <Button
+        android:layout_width="179dp"
+        android:layout_columnSpan="2"
+        android:text="city" />
+    <Button android:text="man" />
+    <Button android:text="woman" />
+
+    <Button
+        android:layout_width="172dp"
+        android:layout_columnSpan="2"
+        android:text="Correct" />
+
+    <TextView
+        android:id="@+id/count_of_clothes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:text="Всего: "/>
+</GridLayout>

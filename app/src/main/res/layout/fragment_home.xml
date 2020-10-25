@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+                <TableRow>
+                        <Button
+                            android:id="@+id/button_add_clothes"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:onClick="Change"
+                            android:text="Добавить" />
+
+                        <Spinner
+                            android:id="@+id/home_filter"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                </TableRow>
+        </TableLayout>
+
+        <GridView
+            android:id="@+id/clothes_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="3"
+            android:verticalSpacing="2dp"
+            android:horizontalSpacing="2dp"
+            android:stretchMode="columnWidth"
+            android:layout_marginBottom="45dp"/>
+
+
+</TableLayout>
