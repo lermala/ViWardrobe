@@ -63,8 +63,12 @@ public class MainActivity extends AppCompatActivity {
         //image_for_adding
     }
 
-
-
+    //событие для кнопки "Добавить" (одежду)
+    public void AddClothes(View view){
+        FragmentManager manager = getSupportFragmentManager();
+        AddingClothesFragment myDialogFragment = new AddingClothesFragment();
+        myDialogFragment.show(manager, "dialog");
+    }
 
     /*Метод для изменения наполнения контента фрагментов/ измена текущ фрагмента*/
     public void Change (View view) {
@@ -82,9 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.menu_profile:
                 fragment = new ProfileFragment();
-                break;
-            case R.id.button_add_clothes:
-                fragment = new AddingClothesFragment();
                 break;
         }
 

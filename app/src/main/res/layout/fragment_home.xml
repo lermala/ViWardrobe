@@ -9,11 +9,12 @@
             android:layout_height="wrap_content">
 
                 <TableRow>
+
                         <Button
                             android:id="@+id/button_add_clothes"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:onClick="Change"
+                            android:onClick="AddClothes"
                             android:text="Добавить" />
 
                         <Spinner
