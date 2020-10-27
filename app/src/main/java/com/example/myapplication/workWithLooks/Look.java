@@ -11,8 +11,29 @@ public class Look {
     private int image;
     private ArrayList<Clothes> clothes;
 
+    private LookTags lookTags = null;
+
+   public enum LookTags{
+       выходной,
+       спортивный,
+       повседневный,
+       нарядный,
+       домашний,
+       деловой,
+       другое,
+       зима,
+       лето,
+       демисезон,
+       внесезон,
+       избранное
+    };
+
     public Look(ArrayList<Clothes> clothes) {
         this.clothes = clothes; //в этом случае придется создавать картинку, состоящую из картинок каждого из предметов
+    }
+
+    public Look() {
+        initLooks();
     }
 
     public Look(int image) {

@@ -6,6 +6,8 @@ public class Clothes {
     private String type;
     private int image;
 
+    private ClothesTags clothesTags;
+
     private static final String[] types = {
             "Все",
             "Верхняя одежда",
@@ -20,6 +22,25 @@ public class Clothes {
             "Юбки - шорты",
             "Аксессуары",
             "Обувь"
+    };
+
+    public enum ClothesTags{
+        избранное,
+        выходной,
+        спортивный,
+        повседневный,
+        нарядный,
+        домашний,
+        деловой,
+        база,
+        зима,
+        лето,
+        демисезон,
+        внесезон,
+        яркий,
+        светлый,
+        тёмный,
+
     };
 
     public Clothes(String name, String type, int image) {

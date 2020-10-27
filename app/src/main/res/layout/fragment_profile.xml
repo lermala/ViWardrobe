@@ -1,36 +1,85 @@
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:rowCount="2"
-    android:layout_margin="10dp"
-    android:columnCount="2">
+    android:layout_margin="10dp">
 
-    <Button
-        android:text="photo"
-        android:layout_height="100dp"
-        android:layout_rowSpan="2"
-        />
-    <Button android:text="name" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/image_clothes"
+            android:scaleType="centerCrop"
+            android:background="@color/grey2"
+            android:src="@drawable/ava"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:text="Валерия Колодина"
+                android:textSize="22sp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
+            <TextView
+                android:text="Россия, Иркутск"
+                android:layout_marginBottom="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <TextView
-        android:text="email"/>
+        android:text="kolodina.lera322@mail.ru"
+        android:layout_marginBottom="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:text="07.03.2001"
+        android:layout_marginBottom="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"/>
 
     <Button
-        android:layout_width="179dp"
-        android:layout_columnSpan="2"
-        android:text="city" />
-    <Button android:text="man" />
-    <Button android:text="woman" />
-
-    <Button
-        android:layout_width="172dp"
-        android:layout_columnSpan="2"
-        android:text="Correct" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Редактировать профиль"/>
 
     <TextView
         android:id="@+id/count_of_clothes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_margin="10dp"
-        android:text="Всего: "/>
-</GridLayout>
+        android:text="Всего предметов одежды: 0"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="15dp"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Всего луков: 0"
+        android:layout_marginBottom="15dp"
+        android:textSize="18sp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:text="Показать полную статистику"/>
+
+
+
+</LinearLayout>

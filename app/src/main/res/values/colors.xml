@@ -7,5 +7,6 @@
     <color name="grey">#41474a</color>
     <color name="greyDark">#353b3d</color>
     <color name="grey2">#81847d</color>
+    <color name="grey2Dart">#5c5f59</color>
 
 </resources>
