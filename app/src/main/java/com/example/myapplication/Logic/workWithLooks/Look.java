@@ -1,39 +1,31 @@
-package com.example.myapplication.workWithLooks;
+package com.example.myapplication.Logic.workWithLooks;
 
+import com.example.myapplication.Logic.Tags;
 import com.example.myapplication.R;
-import com.example.myapplication.workWithClothes.Clothes;
+import com.example.myapplication.Logic.workWithClothes.Clothes;
 
 import java.util.ArrayList;
 
 public class Look {
 
-    private  ArrayList<Look> looks;
+    private  ArrayList<Look> looks; //TODO: УДАЛИТЬ
+
     private int image;
     private ArrayList<Clothes> clothes;
 
-    private LookTags lookTags = null;
-
-   public enum LookTags{
-       выходной,
-       спортивный,
-       повседневный,
-       нарядный,
-       домашний,
-       деловой,
-       другое,
-       зима,
-       лето,
-       демисезон,
-       внесезон,
-       избранное
-    };
+    //--------ТЭГИ---------- (необязат)
+    private Tags.Season season; //сезон
+    private Tags.Use use; // для чего (повседневный...)
+    private Tags.Brightness brightness; //яркость
+    //----------------------
+    //TODO: добавить конструкторы с тэгами (как в clothes)
 
     public Look(ArrayList<Clothes> clothes) {
         this.clothes = clothes; //в этом случае придется создавать картинку, состоящую из картинок каждого из предметов
     }
 
     public Look() {
-        initLooks();
+        initLooks();//TODO: УДАЛИТЬ
     }
 
     public Look(int image) {
@@ -57,7 +49,7 @@ public class Look {
     }
 
 
-    public void initLooks(){
+    public void initLooks(){//TODO: УДАЛИТЬ
         looks.add(new Look(R.drawable.look1));
         looks.add(new Look(R.drawable.look2));
         looks.add(new Look(R.drawable.look3));

@@ -1,4 +1,4 @@
-package com.example.myapplication.workWithClothes;
+package com.example.myapplication.Logic.workWithClothes;
 
 import java.util.ArrayList;
 

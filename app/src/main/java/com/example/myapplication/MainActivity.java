@@ -1,30 +1,22 @@
 package com.example.myapplication;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.Spinner;
 
-import com.example.myapplication.menuFragments.AddingClothesFragment;
+import com.example.myapplication.menuFragments.Dialogs.AddingClothesFragment;
 import com.example.myapplication.menuFragments.CalendarFragment;
+import com.example.myapplication.menuFragments.Dialogs.FragmentAddingLooks;
+import com.example.myapplication.menuFragments.Dialogs.TagsDialogFragment;
 import com.example.myapplication.menuFragments.HomeFragment;
 import com.example.myapplication.menuFragments.LooksFragment;
 import com.example.myapplication.menuFragments.ProfileFragment;
-
-import java.net.DatagramPacket;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,6 +53,21 @@ public class MainActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
         //image_for_adding
+    }
+
+    // открытие диалогового окна для добавления ЛУКОВ
+    public void openDialogLook(View view){
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentAddingLooks fragmentAddingLooks = new FragmentAddingLooks();
+        fragmentAddingLooks.show(manager, "dialog");
+    }
+
+
+    // открытие диалогового окна для тэгов
+    public void openDialogTags(View view){
+        FragmentManager manager = getSupportFragmentManager();
+        TagsDialogFragment tagsDialogFragment = new TagsDialogFragment();
+        tagsDialogFragment.show(manager, "dialog");
     }
 
     //событие для кнопки "Добавить" (одежду)

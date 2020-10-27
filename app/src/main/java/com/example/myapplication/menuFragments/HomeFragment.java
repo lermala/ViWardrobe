@@ -12,15 +12,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myapplication.ClothesDialogFragment;
+import com.example.myapplication.menuFragments.Dialogs.ClothesDialogFragment;
 import com.example.myapplication.R;
-import com.example.myapplication.workWithClothes.Clothes;
-import com.example.myapplication.workWithClothes.ClothesAdapter;
-import com.example.myapplication.workWithClothes.LoadClothesInterface;
-import com.example.myapplication.workWithClothes.WorkClothes;
+import com.example.myapplication.Logic.workWithClothes.Clothes;
+import com.example.myapplication.Logic.workWithClothes.ClothesAdapter;
+import com.example.myapplication.Logic.workWithClothes.LoadClothesInterface;
+import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 
 import java.util.ArrayList;
 import java.util.List;

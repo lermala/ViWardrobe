@@ -12,9 +12,9 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
-import com.example.myapplication.workWithClothes.Clothes;
-import com.example.myapplication.workWithLooks.Look;
-import com.example.myapplication.workWithLooks.LookAdapter;
+import com.example.myapplication.Logic.workWithClothes.Clothes;
+import com.example.myapplication.Logic.workWithLooks.Look;
+import com.example.myapplication.Logic.workWithLooks.LookAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

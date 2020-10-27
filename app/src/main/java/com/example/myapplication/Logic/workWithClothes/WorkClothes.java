@@ -1,8 +1,6 @@
-package com.example.myapplication.workWithClothes;
+package com.example.myapplication.Logic.workWithClothes;
 
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.myapplication.R;
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".menuFragments.AddingClothesFragment">
+    tools:context=".menuFragments.Dialogs.AddingClothesFragment">
 
     <ImageView
         android:id="@+id/image_for_adding"
@@ -17,18 +17,10 @@
         android:src="@drawable/fon"
         android:layout_height="350dp"/>
 
-    <Button
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="addPhoto"
-        android:text="Загрузить фото" />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:maxLines="1"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
@@ -54,13 +46,19 @@
 
         <Spinner
             android:id="@+id/clothes_type"
-            android:layout_marginRight="20dp"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="20dp"
+            android:spinnerMode="dialog" />
 
     </LinearLayout>
 
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:onClick="openDialogTags"
+        android:text="Дополнительно" />
 
 </LinearLayout>

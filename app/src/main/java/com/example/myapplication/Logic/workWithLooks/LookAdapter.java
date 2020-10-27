@@ -1,4 +1,4 @@
-package com.example.myapplication.workWithLooks;
+package com.example.myapplication.Logic.workWithLooks;
 
 import android.content.Context;
 import android.view.LayoutInflater;
