@@ -7,17 +7,21 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import android.net.Uri;
+
 import com.example.myapplication.R;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClothesAdapter extends ArrayAdapter<Clothes> {
 
     private LayoutInflater inflater;
     private int layout;
-    private List<Clothes> clothes;
+    private ArrayList<Clothes> clothes;
 
-    public ClothesAdapter(Context context, int resourse, List<Clothes> clothes){
+    public ClothesAdapter(Context context, int resourse, ArrayList<Clothes> clothes){
         super(context, resourse, clothes);
         this.clothes = clothes;
         this.layout = resourse;
@@ -36,7 +40,10 @@ public class ClothesAdapter extends ArrayAdapter<Clothes> {
 
         Clothes cloth = clothes.get(position);
 
-        flagView.setImageResource(cloth.getImage());
+     //   flagView.setImageResource(cloth.getImage());
+        flagView.setImageURI(cloth.getImageUri());
+        //imageView.setImageURI(selectedImageUri);
+
        // nameView.setText(cloth.getName());
         //capitalView.setText(cloth.getType());
 

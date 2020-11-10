@@ -11,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/image_for_adding"
+            android:id="@+id/image_for_adding_look"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
@@ -120,12 +120,17 @@
 
         <TableRow
             android:layout_marginTop="5dp">
-            <TextView
-                android:text="Назначение:"
-                android:layout_weight="1"
-                android:textSize="18sp">
-            </TextView>
+            <Button
+                android:id="@+id/choose_date_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="Выбрать дату" />
 
+            <TextView android:id="@+id/picked_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp" />
 
         </TableRow>
 

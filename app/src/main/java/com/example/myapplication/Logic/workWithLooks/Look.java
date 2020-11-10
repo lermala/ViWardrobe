@@ -5,6 +5,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Look {
 
@@ -12,6 +13,9 @@ public class Look {
 
     private int image;
     private ArrayList<Clothes> clothes;
+
+    //TODO: сделать эту переменную рабочей
+    private Date lastDate; // дата последнего надевания
 
     //--------ТЭГИ---------- (необязат)
     private Tags.Season season; //сезон

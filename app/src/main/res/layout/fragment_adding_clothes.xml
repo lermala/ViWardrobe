@@ -7,18 +7,21 @@
     tools:context=".menuFragments.Dialogs.AddingClothesFragment">
 
     <ImageView
-        android:id="@+id/image_for_adding"
+        android:id="@+id/image_for_adding_clothes"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@color/cardview_dark_background"
-        android:layout_width="match_parent"
+        android:layout_gravity="center"
         android:scaleType="centerCrop"
+        android:onClick="addPhoto"
         android:src="@drawable/fon"
-        android:layout_height="350dp"/>
+        android:layout_height="300dp"
+        android:layout_width="300dp"/>
 
 
     <EditText
+        android:id="@+id/name_for_adding_clothes"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:maxLines="1"

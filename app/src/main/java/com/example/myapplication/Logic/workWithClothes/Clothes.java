@@ -1,5 +1,7 @@
 package com.example.myapplication.Logic.workWithClothes;
 
+import android.net.Uri;
+
 import com.example.myapplication.Logic.Tags;
 
 public class Clothes{
@@ -8,6 +10,7 @@ public class Clothes{
     private String name;
     private String type;
     private int image;
+    private Uri imageUri;
     //----------------------
 
     //--------ТЭГИ---------- (необязат)
@@ -43,6 +46,13 @@ public class Clothes{
 
     //-------КОНСТРУКТОРЫ С ТЭГАМИ------------
 
+
+    public Clothes(String name, String type, Uri imageUri) {
+        this.name = name;
+        this.type = type;
+        this.imageUri = imageUri;
+    }
+
     public Clothes(String name, String type, int image, Tags.Season season, Tags.Use use, Tags.Brightness brightness) {
         this.name = name;
         this.type = type;
@@ -73,6 +83,9 @@ public class Clothes{
         this.brightness = brightness;
     }
 
+    public Clothes(String lera, String type) {
+    }
+
     //--------------------------------
 
 
@@ -89,6 +102,10 @@ public class Clothes{
         return image;
     }
 
+    public Uri getImageUri() {
+        return imageUri;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -103,5 +120,13 @@ public class Clothes{
 
     public static String[] getTypes() {
         return types;
+    }
+
+    @Override
+    public String toString() {
+        return "Clothes{" +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' + imageUri +
+                '}';
     }
 }
