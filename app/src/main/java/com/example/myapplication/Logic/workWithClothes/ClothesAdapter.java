@@ -1,6 +1,8 @@
 package com.example.myapplication.Logic.workWithClothes;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +13,11 @@ import android.net.Uri;
 
 import com.example.myapplication.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ClothesAdapter extends ArrayAdapter<Clothes> {
+
+    private static final String TAG = "ADapter clothes | ";
 
     private LayoutInflater inflater;
     private int layout;
@@ -41,8 +43,15 @@ public class ClothesAdapter extends ArrayAdapter<Clothes> {
         Clothes cloth = clothes.get(position);
 
      //   flagView.setImageResource(cloth.getImage());
+        Log.i(TAG, "cloth: "  + cloth.toString());
+
         flagView.setImageURI(cloth.getImageUri());
-        //imageView.setImageURI(selectedImageUri);
+
+
+
+        //flagView.setImageURI(intent);
+
+       // imageView.setImageURI(selectedImageUri);
 
        // nameView.setText(cloth.getName());
         //capitalView.setText(cloth.getType());

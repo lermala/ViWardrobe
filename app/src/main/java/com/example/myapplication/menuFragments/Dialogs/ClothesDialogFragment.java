@@ -14,7 +14,10 @@ import androidx.fragment.app.DialogFragment;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
 import com.example.myapplication.R;
 
-// Фрагмент для просмотра одежды
+/**
+ * ФРАГМЕНТ КОТОРЫЙ ПОКАЗЫВАЕТ БОЛЕЕ ПОДРОБНУЮ ИНФОРМАЦИЮ ОБ ПРЕДМЕТЕ ОДЕЖДЫ
+ * (ПРИ КЛИКЕ НА КАРТИНКУ НА ГЛАВНОМ ФРАГМЕНТЕ)
+ */
 public class ClothesDialogFragment extends DialogFragment {
     private Clothes clothes; // selected item
 
@@ -32,7 +35,7 @@ public class ClothesDialogFragment extends DialogFragment {
 
         // вписываем все значения кликнутого итема в диалогове окно:
         ImageView imageView = view.findViewById(R.id.dialog_clothes_image); //фото
-        imageView.setImageResource(clothes.getImage());
+        imageView.setImageURI(clothes.getImageUri());
 
         TextView nameTextView = view.findViewById(R.id.dialog_clothes_name);//название
         nameTextView.setText("Название: " + clothes.getName());

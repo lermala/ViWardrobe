@@ -18,16 +18,14 @@ import com.example.myapplication.menuFragments.Dialogs.ClothesDialogFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
 import com.example.myapplication.Logic.workWithClothes.ClothesAdapter;
-import com.example.myapplication.Logic.workWithClothes.LoadClothesInterface;
 import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    private LoadClothesInterface loadClothesInterface = new WorkClothes();
-    private ArrayList<Clothes> clothes = loadClothesInterface.getAllClothes();
+    //private LoadClothesInterface loadClothesInterface = new WorkClothes();
+    private ArrayList<Clothes> clothes = WorkClothes.getAllClothes();
     private GridView clothesGridView;
 
     @Override

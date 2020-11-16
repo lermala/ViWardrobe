@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.Logic.workWithClothes.LoadClothesInterface;
 import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 
 public class ProfileFragment extends Fragment {
@@ -27,8 +26,7 @@ public class ProfileFragment extends Fragment {
     public void onStart() {
         super.onStart();
         TextView textView = getActivity().findViewById(R.id.count_of_clothes);
-        LoadClothesInterface loadClothesInterface = new WorkClothes();
-        textView.setText("Всего предметов одежды: " + loadClothesInterface.getAllClothes().size());
+        textView.setText("Всего предметов одежды: " + WorkClothes.getAllClothes().size());
     }
 
 }

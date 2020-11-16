@@ -26,6 +26,8 @@ import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
 
+import java.util.ArrayList;
+
 import static android.app.Activity.RESULT_OK;
 
 public class AddingClothesFragment extends DialogFragment {
@@ -76,51 +78,44 @@ public class AddingClothesFragment extends DialogFragment {
         });
         //-----------------
 
-
         builder.setView(view);
         builder.setTitle("Добавить одежду");
+
         builder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // Закрываем окно
-                dialog.cancel();
+                //dialog.cancel();
             }
         });
+
+        //TODO: убрать positive button, чтобы окошко НЕ ЗАКРЫВАЛОСЬ при ошибке
         builder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                //TODO:
-                // 1) вынести проверки в отдельную функцию
-                // 2)
-                clothesForAdding = getDataFromView(view); // записываем
-                // TODO:
-                //  3) обновляем
-                // получаем элемент GridView
 
+                // сначала проверим все на корректный ввод
+                if (!checkDataFromView(view)){
+                    //.///
+                    return;
+                }
+
+                clothesForAdding = getDataFromView(view); // записываем
+
+                // получаем элемент GridView
                 GridView clothesGridView = (GridView) getActivity().findViewById(R.id.clothes_list);
 
-                // берем список
-                WorkClothes workClothes = new WorkClothes();
-                workClothes.addClothes(clothesForAdding); //добавляем в него
+                WorkClothes.addClothes(clothesForAdding); //добавили в общий список
 
-                Log.i(TAG, "clfgji1111 "  + clothesForAdding.toString());
-
-                //clothesGridView.get
-
-                clothesGridView.setAdapter(new ClothesAdapter(getActivity(), // отображаем новую таблицу
-                        R.layout.list_item, workClothes.getAllClothes()));
-
-
-                //  4) закрываем диалог И ВООБЩЕ СДЕЛАТЬ НЕ ДИАЛОГОВЫМ
-                dialog.cancel(); // закрываем
+                // отображаем новую таблицу
+                clothesGridView.setAdapter(new ClothesAdapter(getActivity(),
+                        R.layout.list_item, WorkClothes.getAllClothes()));
             }
         });
         return builder.create();
     }
 
-
-
-    private Clothes getDataFromView(View view){
+    private boolean checkDataFromView(View view){
         // сначала проверим все на корректный ввод
-        if (selectedImageUri == null) {//если картинка не выбрана
+        if (selectedImageUri == null) { //если картинка не выбрана
             Toast toast = Toast.makeText(getActivity().getApplicationContext(),
                     "Загрузите фото!", Toast.LENGTH_SHORT);
             toast.show();
@@ -136,6 +131,18 @@ public class AddingClothesFragment extends DialogFragment {
             toast.show();
         }
 
+        return true;
+    }
+    /**
+     * считываем данные с окошка ввода
+     * @param view
+     * @return объект типа clothes
+     */
+    private Clothes getDataFromView(View view){
+        // считываем название одежды
+        TextView textViewName = (TextView) view.findViewById(R.id.name_for_adding_clothes);
+        String name = textViewName.getText().toString();
+
         // считываем тип одежды (в спиннере)
         // TODO: сделать проверку спиннера
         String type = spinner.getSelectedItem().toString();
@@ -150,9 +157,7 @@ public class AddingClothesFragment extends DialogFragment {
         return cloth;
     }
 
-
-
-    static final int GALLERY_REQUEST = 1; // для галареи
+    static final int GALLERY_REQUEST = 1; // для галереи
 
     public void addPhoto(View view){ //открывает диалог окно для выбора галереи
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);

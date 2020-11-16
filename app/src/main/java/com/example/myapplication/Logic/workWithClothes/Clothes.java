@@ -10,6 +10,9 @@ public class Clothes{
     private String name;
     private String type;
     private int image;
+   // private String imageUriString;
+    private String imageUriString;
+
     private Uri imageUri;
     //----------------------
 
@@ -19,6 +22,10 @@ public class Clothes{
     private Tags.Brightness brightness; //яркость
     //----------------------
 
+
+    public Uri getImageUri() {
+        return imageUri;
+    }
 
     private static final String[] types = {
             //TODO: убрать "Все" и возможно переделать из стринг в enum
@@ -53,6 +60,12 @@ public class Clothes{
         this.imageUri = imageUri;
     }
 
+    public Clothes(String name, String type, String imageUriString) {
+        this.name = name;
+        this.type = type;
+        this.imageUriString = imageUriString;
+    }
+
     public Clothes(String name, String type, int image, Tags.Season season, Tags.Use use, Tags.Brightness brightness) {
         this.name = name;
         this.type = type;
@@ -83,8 +96,6 @@ public class Clothes{
         this.brightness = brightness;
     }
 
-    public Clothes(String lera, String type) {
-    }
 
     //--------------------------------
 
@@ -102,9 +113,10 @@ public class Clothes{
         return image;
     }
 
-    public Uri getImageUri() {
-        return imageUri;
+    public String getImageUriString() {
+        return imageUriString;
     }
+
 
     public void setName(String name) {
         this.name = name;
@@ -126,7 +138,8 @@ public class Clothes{
     public String toString() {
         return "Clothes{" +
                 "name='" + name + '\'' +
-                ", type='" + type + '\'' + imageUri +
+                ", type='" + type + '\'' + imageUriString +
                 '}';
     }
+
 }
