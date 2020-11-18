@@ -51,6 +51,11 @@ public class Clothes{
         this.image = image;
     }
 
+    public Clothes(String name, Uri image) {
+        this.name = name;
+        this.imageUri = image;
+    }
+
     //-------КОНСТРУКТОРЫ С ТЭГАМИ------------
 
 

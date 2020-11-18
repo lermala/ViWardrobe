@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
-    //private LoadClothesInterface loadClothesInterface = new WorkClothes();
     private ArrayList<Clothes> clothes = WorkClothes.getAllClothes();
     private GridView clothesGridView;
 

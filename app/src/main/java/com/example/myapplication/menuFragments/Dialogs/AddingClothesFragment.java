@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
@@ -67,7 +69,6 @@ public class AddingClothesFragment extends DialogFragment {
         // Применяем адаптер к элементу spinner
         spinner.setAdapter(adapter);
 
-
         //------загрузка фото юзером
         imageView = (ImageView) view.findViewById(R.id.image_for_adding_clothes);
         // нажали на картинку (для добавления)
@@ -94,7 +95,7 @@ public class AddingClothesFragment extends DialogFragment {
 
                 // сначала проверим все на корректный ввод
                 if (!checkDataFromView(view)){
-                    //.///
+                    //.,,,,,///
                     return;
                 }
 
@@ -105,6 +106,10 @@ public class AddingClothesFragment extends DialogFragment {
 
                 WorkClothes.addClothes(clothesForAdding); //добавили в общий список
 
+               // File file = new File(getContext().getFilesDir(), "LERA_imagename.png");
+
+
+
                 // отображаем новую таблицу
                 clothesGridView.setAdapter(new ClothesAdapter(getActivity(),
                         R.layout.list_item, WorkClothes.getAllClothes()));
@@ -113,6 +118,11 @@ public class AddingClothesFragment extends DialogFragment {
         return builder.create();
     }
 
+    /**
+     * Проверяем корректность ввода в окошке
+     * @param view
+     * @return
+     */
     private boolean checkDataFromView(View view){
         // сначала проверим все на корректный ввод
         if (selectedImageUri == null) { //если картинка не выбрана
@@ -181,11 +191,4 @@ public class AddingClothesFragment extends DialogFragment {
     }
 
 
-    public Clothes getClothesForAdding() {
-        return clothesForAdding;
-    }
-
-    public void setClothesForAdding(Clothes clothesForAdding) {
-        this.clothesForAdding = clothesForAdding;
-    }
 }

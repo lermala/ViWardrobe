@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -13,16 +12,18 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.myapplication.Logic.workWithClothes.Clothes;
+import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 import com.example.myapplication.menuFragments.Dialogs.AddingClothesFragment;
 import com.example.myapplication.menuFragments.CalendarFragment;
 import com.example.myapplication.menuFragments.Dialogs.FragmentAddingLooks;
@@ -30,11 +31,13 @@ import com.example.myapplication.menuFragments.Dialogs.TagsDialogFragment;
 import com.example.myapplication.menuFragments.HomeFragment;
 import com.example.myapplication.menuFragments.LooksFragment;
 import com.example.myapplication.menuFragments.ProfileFragment;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MAIN ACTIVITY | "; // 4 debugging
 
   //  private static final int PERMISSION_REQUEST_CODE = 123;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
@@ -42,13 +45,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         // если есть разрешение
-        if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
-            setContentView(R.layout.activity_main);
-            addFirstFragment();
+       /* if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
 
-        }
+
+        }*/
+
+        String path = getFilesDir().toString();
+
+        Log.i(TAG,"PATH = " + path);
+
+        Bitmap picClothes1 = BitmapFactory.decodeResource(getResources(), R.drawable.c1);
+        createDirectoryAndSaveFile(picClothes1, "pic1");
+        WorkClothes.addClothes(new Clothes("test clth", Uri.parse(path +
+                "/Clothes/" + "pic1")));
+
+        addFirstFragment();
 
         // ---------------Запрос на доступ к файлам------------
         /*if (hasPermissions()){
@@ -137,6 +151,30 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+
+    private void createDirectoryAndSaveFile(Bitmap imageToSave, String fileName){
+        String path = getFilesDir().toString();
+
+        File direct = new File(getFilesDir(), "/Clothes");
+
+        if (!direct.exists()) {
+            File imageClothesDir = new File(path + "/Clothes/");
+            imageClothesDir.mkdirs();
+        }
+
+        File file = new File(new File(path + "/Clothes/"), fileName);
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /*private void makeFolder(){
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"fandroid");
