@@ -48,7 +48,6 @@ public class ClothesAdapter extends ArrayAdapter<Clothes> {
         flagView.setImageURI(cloth.getImageUri());
 
 
-
         //flagView.setImageURI(intent);
 
        // imageView.setImageURI(selectedImageUri);

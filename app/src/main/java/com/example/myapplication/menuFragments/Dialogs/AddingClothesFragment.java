@@ -3,6 +3,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +32,8 @@ import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
@@ -42,6 +48,11 @@ public class AddingClothesFragment extends DialogFragment {
     private Uri selectedImageUri = null; //путь выбранного фото
 
     private Clothes clothesForAdding; // from view
+
+    // TODO: считывать с настроек последнее число и вносить ВМЕСТО 0
+    private int fileName = 0; // переменная для генерации имени картинки (от 0 до ...)
+
+
 
 
     @Override
@@ -104,7 +115,12 @@ public class AddingClothesFragment extends DialogFragment {
                 // получаем элемент GridView
                 GridView clothesGridView = (GridView) getActivity().findViewById(R.id.clothes_list);
 
-                WorkClothes.addClothes(clothesForAdding); //добавили в общий список
+                //WorkClothes.addClothes(clothesForAdding); //добавили в общий список
+
+
+                Bitmap image = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+
+                addPictureToGrid();
 
                // File file = new File(getContext().getFilesDir(), "LERA_imagename.png");
 
@@ -117,6 +133,57 @@ public class AddingClothesFragment extends DialogFragment {
         });
         return builder.create();
     }
+
+    /**
+     * Доьбавляем запись в GRID (=отображаем)
+     * @param selectedImageUri - выбранное фото ЮЗЕРОМ (из его галлереи)
+     */
+    private void addPictureToGrid(Uri selectedImageUri){
+        fileName++;
+
+        String path = getContext().getFilesDir().toString() + "/Clothes/"; // путь к папке с одеждой
+
+        // TODO: сделать не из ресурсов, а с интента добавления одежды
+        //Bitmap picClothes1 = BitmapFactory.decodeResource(getResources(), R.drawable.c1);
+        Bitmap pictureCloth = null;
+
+        try {
+            pictureCloth = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),
+                    selectedImageUri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        createDirectoryAndSaveFile(pictureCloth, fileName + "");
+
+        //добавляем в список всех одежд (парсим path to Uri)
+        WorkClothes.addClothes(new Clothes("test clth", Uri.parse(path + fileName)));
+    }
+
+    private void createDirectoryAndSaveFile(Bitmap imageToSave, String fileName){
+        String path = getContext().getFilesDir().toString();
+
+        File direct = new File(getContext().getFilesDir(), "/Clothes");
+
+        if (!direct.exists()) {
+            File imageClothesDir = new File(path + "/Clothes/");
+            imageClothesDir.mkdirs();
+        }
+
+        File file = new File(new File(path + "/Clothes/"), fileName);
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Проверяем корректность ввода в окошке
@@ -186,6 +253,7 @@ public class AddingClothesFragment extends DialogFragment {
                 if(resultCode == RESULT_OK){
                     selectedImageUri = imageReturnedIntent.getData();
                     imageView.setImageURI(selectedImageUri);
+
                 }
         }
     }
