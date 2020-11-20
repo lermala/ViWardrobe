@@ -20,10 +20,6 @@ public class WorkClothes{
         this.clothes = clothes;
     }
 
-    public WorkClothes() {
-        initClothes();
-    }
-
     /*Добавление одежды в список*/
     public static void addClothes(Clothes cloth){
         clothes.add(cloth);

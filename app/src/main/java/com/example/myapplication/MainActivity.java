@@ -29,15 +29,14 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MAIN ACTIVITY | "; // 4 debugging
 
+    public static int fileName = 0; // FIXME
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         addFirstFragment();
-
     }
 
 

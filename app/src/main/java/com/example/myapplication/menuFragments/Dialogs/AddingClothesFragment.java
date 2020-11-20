@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,13 +25,12 @@ import android.widget.Toast;
 
 import com.example.myapplication.Logic.workWithClothes.ClothesAdapter;
 import com.example.myapplication.Logic.workWithClothes.WorkClothes;
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -48,9 +44,6 @@ public class AddingClothesFragment extends DialogFragment {
     private Uri selectedImageUri = null; //путь выбранного фото
 
     private Clothes clothesForAdding; // from view
-
-    // TODO: считывать с настроек последнее число и вносить ВМЕСТО 0
-    private int fileName = 0; // переменная для генерации имени картинки (от 0 до ...)
 
 
 
@@ -104,27 +97,18 @@ public class AddingClothesFragment extends DialogFragment {
         builder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
+                // TODO: ВЕрнуть строки ниже
                 // сначала проверим все на корректный ввод
                 if (!checkDataFromView(view)){
                     //.,,,,,///
                     return;
                 }
-
-                clothesForAdding = getDataFromView(view); // записываем
+                //clothesForAdding = getDataFromView(view); // записываем
 
                 // получаем элемент GridView
                 GridView clothesGridView = (GridView) getActivity().findViewById(R.id.clothes_list);
 
-                //WorkClothes.addClothes(clothesForAdding); //добавили в общий список
-
-
-                Bitmap image = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-
-                addPictureToGrid();
-
-               // File file = new File(getContext().getFilesDir(), "LERA_imagename.png");
-
-
+                addPictureToGrid(view);
 
                 // отображаем новую таблицу
                 clothesGridView.setAdapter(new ClothesAdapter(getActivity(),
@@ -134,30 +118,45 @@ public class AddingClothesFragment extends DialogFragment {
         return builder.create();
     }
 
-    /**
-     * Доьбавляем запись в GRID (=отображаем)
-     * @param selectedImageUri - выбранное фото ЮЗЕРОМ (из его галлереи)
-     */
-    private void addPictureToGrid(Uri selectedImageUri){
-        fileName++;
+//    private String path = getContext().getFilesDir().toString() + "/Clothes/"; // путь к папке с одеждой
 
+    /**
+     *
+     * @return Имя файла (картинки)
+     */
+    private Uri savePictureAndGetUri(){
         String path = getContext().getFilesDir().toString() + "/Clothes/"; // путь к папке с одеждой
 
-        // TODO: сделать не из ресурсов, а с интента добавления одежды
-        //Bitmap picClothes1 = BitmapFactory.decodeResource(getResources(), R.drawable.c1);
-        Bitmap pictureCloth = null;
+        String fileName = MainActivity.fileName + "";
 
-        try {
-            pictureCloth = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),
-                    selectedImageUri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // TODO: ПОМЕНЯТЬ FILENAME( MainActivity.fileName )
+        // Картинка (считываем с imageView, а не берем uri, т.к. сохраняем в Bitmap, который
+        // переворачивается (из-за кэша, который я не знаю как удалить))
+        Bitmap image = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
 
-        createDirectoryAndSaveFile(pictureCloth, fileName + "");
+        createDirectoryAndSaveFile(image, fileName); // save
+
+        MainActivity.fileName++; // можно сделать имя зависимым от времени + даты // FIXME
+
+        return Uri.parse(path + fileName);
+    }
+
+    private void addPictureToGrid(View view){
+        // считываем название одежды
+        TextView textViewName = (TextView) view.findViewById(R.id.name_for_adding_clothes);
+        String name = textViewName.getText().toString();
+
+        // считываем тип одежды (в спиннере)
+        String type = spinner.getSelectedItem().toString();
+
+        Uri imageUri = savePictureAndGetUri(); // путь до картинки
 
         //добавляем в список всех одежд (парсим path to Uri)
-        WorkClothes.addClothes(new Clothes("test clth", Uri.parse(path + fileName)));
+        /*WorkClothes.addClothes(new Clothes("test clth" + MainActivity.fileName,
+                Uri.parse(path + fileName)));*/
+
+        Clothes cloth = new Clothes(name, type, imageUri);
+        WorkClothes.addClothes(cloth); // добавляем в общий список
     }
 
     private void createDirectoryAndSaveFile(Bitmap imageToSave, String fileName){
@@ -171,6 +170,7 @@ public class AddingClothesFragment extends DialogFragment {
         }
 
         File file = new File(new File(path + "/Clothes/"), fileName);
+
         if (file.exists()) {
             file.delete();
         }
@@ -184,7 +184,6 @@ public class AddingClothesFragment extends DialogFragment {
         }
     }
 
-
     /**
      * Проверяем корректность ввода в окошке
      * @param view
@@ -194,7 +193,7 @@ public class AddingClothesFragment extends DialogFragment {
         // сначала проверим все на корректный ввод
         if (selectedImageUri == null) { //если картинка не выбрана
             Toast toast = Toast.makeText(getActivity().getApplicationContext(),
-                    "Загрузите фото!", Toast.LENGTH_SHORT);
+                    "Выберите фото!", Toast.LENGTH_SHORT);
             toast.show();
         }
 
@@ -207,6 +206,9 @@ public class AddingClothesFragment extends DialogFragment {
                     "Введите название", Toast.LENGTH_SHORT);
             toast.show();
         }
+
+        // TODO: сделать проверку спиннера либо поставить ему дефолтное значение и
+        // TODO: удалить "Все"
 
         return true;
     }
@@ -234,7 +236,7 @@ public class AddingClothesFragment extends DialogFragment {
         return cloth;
     }
 
-    static final int GALLERY_REQUEST = 1; // для галереи
+    static final int GALLERY_REQUEST = 1; // для галлереи
 
     public void addPhoto(View view){ //открывает диалог окно для выбора галереи
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
@@ -253,10 +255,8 @@ public class AddingClothesFragment extends DialogFragment {
                 if(resultCode == RESULT_OK){
                     selectedImageUri = imageReturnedIntent.getData();
                     imageView.setImageURI(selectedImageUri);
-
                 }
         }
     }
-
 
 }
