@@ -32,6 +32,7 @@ import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
+import com.example.myapplication.fileWork.FileWork;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,19 +41,18 @@ import static android.app.Activity.RESULT_OK;
 
 public class AddingClothesFragment extends DialogFragment {
 
-    private static final String TAG = "ADDING CLOTHES | ";
+    private static final String TAG = "ADDING CLOTHES | "; // FIXME
 
-    private ImageView imageView; // фото
-    private Spinner spinner; // спиннер с типами
+    TextView textViewName;
+    ImageView imageView; // фото
+    Spinner spinner; // спиннер с типами
 
-    private Uri selectedImageUri = null; //путь выбранного фото
+    Uri selectedImageUri = null; //путь выбранного фото
 
     String name, type; // имя и тип одежды
     Uri imageUri; // путь до картинки с одеждой
 
     DBHelper dbHelper = MainActivity.dbHelper;
-
-    private Clothes clothesForAdding; // from view
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -200,16 +200,20 @@ public class AddingClothesFragment extends DialogFragment {
         database.delete(DBHelper.TABLE_CLOTHES, null, null);
     }
 
-    TextView textViewName;
-
     private void getDataFromView(View view){
         // считываем название одежды
         name = textViewName.getText().toString();
-
         // считываем тип одежды (в спиннере)
         type = spinner.getSelectedItem().toString();
 
-        imageUri = savePictureAndGetUri(); // путь до картинки
+        //imageUri = savePictureAndGetUri(); // путь до картинки
+        FileWork fileWork = new FileWork(getContext());
+
+        // Картинка (считываем с imageView, а не берем uri, т.к. сохраняем в Bitmap, который
+        // переворачивается (из-за кэша, который я не знаю как удалить))
+        imageUri = fileWork.savePictureAndGetUri(
+                ( (BitmapDrawable)imageView.getDrawable() ).getBitmap()
+        );
 
         //добавляем в список всех одежд (парсим path to Uri)
         /*WorkClothes.addClothes(new Clothes("test clth" + MainActivity.fileName,
@@ -231,9 +235,9 @@ public class AddingClothesFragment extends DialogFragment {
         // TODO: ПОМЕНЯТЬ FILENAME( MainActivity.fileName )
         // Картинка (считываем с imageView, а не берем uri, т.к. сохраняем в Bitmap, который
         // переворачивается (из-за кэша, который я не знаю как удалить))
-        Bitmap image = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+        Bitmap image = ( (BitmapDrawable)imageView.getDrawable() ).getBitmap();
 
-        createDirectoryAndSaveFile(image, fileName); // save
+       // createDirectoryAndSaveFile(image, fileName); // save
 
         MainActivity.fileName++; // можно сделать имя зависимым от времени + даты // FIXME
 
@@ -319,6 +323,7 @@ public class AddingClothesFragment extends DialogFragment {
         Clothes cloth = new Clothes(name, type, selectedImageUri);
         return cloth;
     }
+
 
     static final int GALLERY_REQUEST = 1; // для галлереи
 

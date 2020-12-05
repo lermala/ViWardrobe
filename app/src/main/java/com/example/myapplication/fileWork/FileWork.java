@@ -16,29 +16,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class FileWork {
+    private static final String TAG = "ADDING CLOTHES | "; // FIXME
 
     private Context context;
-    final File PATH_ALL_FILES;
-    final File PATH_CLOTHES;
+    final File PATH_ALL_FILES; // путь до внутренней папки
+    final File PATH_CLOTHES; // путь до папки с картинками одежды
 
     public FileWork(Context context) {
         this.context = context;
         PATH_ALL_FILES = context.getFilesDir();
-        PATH_CLOTHES = new File(PATH_ALL_FILES, "/Clothes");
+        PATH_CLOTHES = new File(PATH_ALL_FILES, "/Clothes/");
 
         if (!PATH_CLOTHES.exists()) {
             File imageClothesDir = new File(PATH_ALL_FILES + "/Clothes/");
             imageClothesDir.mkdirs();
         }
+
+        Log.i(TAG,"PATH_CLOTHES  " + PATH_CLOTHES.toString());
     }
 
     /**
      *
      * @return Имя файла (картинки)
      */
-    private Uri savePictureAndGetUri(Bitmap image){
-
-        String fileName = MainActivity.fileName + "";
+    public Uri savePictureAndGetUri(Bitmap image){
+        String fileName = "/" + MainActivity.fileName + "";
 
         // TODO: ПОМЕНЯТЬ FILENAME( MainActivity.fileName )
 
@@ -46,11 +48,14 @@ public class FileWork {
 
         MainActivity.fileName++; // можно сделать имя зависимым от времени + даты // FIXME
 
+        Log.i(TAG,"Uri.parse PATH_CLOTHES  " + PATH_CLOTHES.toString() + fileName);
+
         return Uri.parse(PATH_CLOTHES.toString() + fileName);
     }
 
-    private void createDirectoryAndSaveFile(Bitmap imageToSave, String fileName){
-        File file = new File(new File(String.valueOf(PATH_CLOTHES)), fileName);
+    public void createDirectoryAndSaveFile(Bitmap imageToSave, String fileName){
+        File file = new File(new File(PATH_CLOTHES.toString()), fileName);
+        //File file = new File(new File(path + "/Clothes/"), fileName);
 
         if (file.exists()) {
             file.delete();
