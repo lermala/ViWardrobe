@@ -1,11 +1,16 @@
 package com.example.myapplication.menuFragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,17 +25,24 @@ import com.example.myapplication.Logic.workWithClothes.Clothes;
 import com.example.myapplication.Logic.workWithClothes.ClothesAdapter;
 import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
+    private static final String TAG = "Home Fragment | "; //FIXME
 
     private ArrayList<Clothes> clothes = WorkClothes.getAllClothes();
     private GridView clothesGridView;
+
+    //context menu items:
+    public static final int IDM_A = 101; //deleting
+    public static final int IDM_B = 102;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
         return view;
     }
 
@@ -60,6 +72,14 @@ public class HomeFragment extends Fragment {
                 myDialogFragment.show(manager, "dialog");
             }
         };
+
+        //////new
+
+        //AdapterView.OnCreateContextMenuListener itemContextMenuListener
+        registerForContextMenu(clothesGridView);
+
+        //-----------
+
         // подключаем слушатель к итемам
         clothesGridView.setOnItemClickListener(itemListener);
 
@@ -107,6 +127,66 @@ public class HomeFragment extends Fragment {
         //------------------------END_СПИНЕР---------------------------
     }
 
+    private int contextMenuGridPosition; //номер элемента в gridview. появляется при длительном нажатии
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(Menu.NONE, IDM_A, Menu.NONE, "Удалить");
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        contextMenuGridPosition = info.position; //номер элемента в gridview
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case IDM_A:
+                // TODO: добавить "Точно ли хотите удалить?" да/нет
+
+                // ДЛЯ ПРОВЕРКИ
+                String path = getContext().getFilesDir().toString();
+                File directory = new File(path + "/Clothes");
+                File[] files = directory.listFiles();
+                Log.d("Files", "Size BEFORE: "+ files.length);
+                for (int i = 0; i < files.length; i++)
+                {
+                    Log.d("Files", "FileName:" + files[i].getName());
+                }
+
+
+                // получаем путь до картинки этого элемента
+                Uri imgUri = WorkClothes.getClothes(contextMenuGridPosition).getImageUri();
+                File file = new File(String.valueOf(imgUri));
+
+                // Удаляем фото из папки с картинками
+                if (file.delete()){
+                    Log.i(TAG,"del OK");
+                }
+                else Log.i(TAG,"del is not OK");
+
+                WorkClothes.deleteCloth(contextMenuGridPosition); //удаляем из списка
+
+                // ДЛЯ ПРОВЕРКИ
+                files = directory.listFiles();
+                Log.d("Files", "Size AFTER: "+ files.length);
+                for (int i = 0; i < files.length; i++)
+                {
+                    Log.d("Files", "FileName:" + files[i].getName());
+                }
+
+                // отображаем новую таблицу
+                clothesGridView.setAdapter(new ClothesAdapter(getActivity(),
+                        R.layout.list_item, WorkClothes.getAllClothes()));
+
+                Toast.makeText(getActivity(), "Удаление завершено", Toast.LENGTH_LONG)
+                        .show();
+
+                return true;
+        }
+        return super.onContextItemSelected(item);
+    }
 
 
 }

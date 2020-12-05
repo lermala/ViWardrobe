@@ -16,12 +16,6 @@ public class Clothes{
     private Uri imageUri;
     //----------------------
 
-    //--------ТЭГИ---------- (необязат)
-    private Tags.Season season; //сезон
-    private Tags.Use use; // для чего (повседневный...)
-    private Tags.Brightness brightness; //яркость
-    //----------------------
-
 
     public Uri getImageUri() {
         return imageUri;
@@ -44,23 +38,6 @@ public class Clothes{
             "Обувь"
     };
 
-    //конструктор без тэгов
-    public Clothes(String name, String type, int image) {
-        this.name = name;
-        this.type = type;
-        this.image = image;
-    }
-
-    public Clothes() {
-    }
-
-    public Clothes(String name, Uri image) {
-        this.name = name;
-        this.imageUri = image;
-    }
-
-    //-------КОНСТРУКТОРЫ С ТЭГАМИ------------
-
 
     public Clothes(String name, String type, Uri imageUri) {
         this.name = name;
@@ -68,41 +45,8 @@ public class Clothes{
         this.imageUri = imageUri;
     }
 
-    public Clothes(String name, String type, String imageUriString) {
-        this.name = name;
-        this.type = type;
-        this.imageUriString = imageUriString;
-    }
 
-    public Clothes(String name, String type, int image, Tags.Season season, Tags.Use use, Tags.Brightness brightness) {
-        this.name = name;
-        this.type = type;
-        this.image = image;
-        this.season = season;
-        this.use = use;
-        this.brightness = brightness;
-    }
 
-    public Clothes(String name, String type, int image, Tags.Season season) {
-        this.name = name;
-        this.type = type;
-        this.image = image;
-        this.season = season;
-    }
-
-    public Clothes(String name, String type, int image, Tags.Use use) {
-        this.name = name;
-        this.type = type;
-        this.image = image;
-        this.use = use;
-    }
-
-    public Clothes(String name, String type, int image, Tags.Brightness brightness) {
-        this.name = name;
-        this.type = type;
-        this.image = image;
-        this.brightness = brightness;
-    }
 
 
     //--------------------------------

@@ -1,11 +1,7 @@
 package com.example.myapplication.Logic.workWithClothes;
 
-import android.net.Uri;
 import android.widget.ListView;
 
-import com.example.myapplication.R;
-
-import java.net.URI;
 import java.util.ArrayList;
 
 public class WorkClothes{
@@ -23,6 +19,30 @@ public class WorkClothes{
     /*Добавление одежды в список*/
     public static void addClothes(Clothes cloth){
         clothes.add(cloth);
+    }
+
+    public static void deleteCloth(int positionForDeleting){
+        clothes.remove(positionForDeleting);
+    }
+
+    /**
+     * Функция фильтрации одежды
+     * @param type - тип для фильтрации
+     * @return отфильтрованный список (только одежда с указанным типом)
+     */
+    public static ArrayList<Clothes> filter(String type){
+        ArrayList<Clothes> filteredList = new ArrayList<>();
+        for (Clothes el:
+             clothes) {
+            if (el.getType().equals(type))
+                filteredList.add(el);
+        }
+        return filteredList;
+    }
+
+
+    public static Clothes getClothes(int position) {
+        return clothes.get(position);
     }
 
     //добаляем дефолтную одежду

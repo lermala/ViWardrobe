@@ -1,11 +1,9 @@
 package com.example.myapplication.Logic.workWithLooks;
 
-import com.example.myapplication.Logic.Tags;
 import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Look {
 
@@ -14,15 +12,6 @@ public class Look {
     private int image;
     private ArrayList<Clothes> clothes;
 
-    //TODO: сделать эту переменную рабочей
-    private Date lastDate; // дата последнего надевания
-
-    //--------ТЭГИ---------- (необязат)
-    private Tags.Season season; //сезон
-    private Tags.Use use; // для чего (повседневный...)
-    private Tags.Brightness brightness; //яркость
-    //----------------------
-    //TODO: добавить конструкторы с тэгами (как в clothes)
 
     public Look(ArrayList<Clothes> clothes) {
         this.clothes = clothes; //в этом случае придется создавать картинку, состоящую из картинок каждого из предметов
@@ -51,7 +40,6 @@ public class Look {
     public void setClothes(ArrayList<Clothes> clothes) {
         this.clothes = clothes;
     }
-
 
     public void initLooks(){//TODO: УДАЛИТЬ
         looks.add(new Look(R.drawable.look1));

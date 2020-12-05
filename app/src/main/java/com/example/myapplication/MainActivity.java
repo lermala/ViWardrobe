@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.myapplication.Logic.workWithClothes.Clothes;
+import com.example.myapplication.Logic.workWithClothes.DBHelper;
 import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 import com.example.myapplication.menuFragments.Dialogs.AddingClothesFragment;
 import com.example.myapplication.menuFragments.CalendarFragment;
@@ -30,12 +31,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MAIN ACTIVITY | "; // 4 debugging
 
     public static int fileName = 0; // FIXME
+    public static DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        dbHelper = new DBHelper(this);
         addFirstFragment();
     }
 

@@ -1,8 +1,11 @@
 package com.example.myapplication.menuFragments.Dialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -24,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.Logic.workWithClothes.ClothesAdapter;
+import com.example.myapplication.Logic.workWithClothes.DBHelper;
 import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
@@ -43,10 +47,12 @@ public class AddingClothesFragment extends DialogFragment {
 
     private Uri selectedImageUri = null; //путь выбранного фото
 
+    String name, type; // имя и тип одежды
+    Uri imageUri; // путь до картинки с одеждой
+
+    DBHelper dbHelper = MainActivity.dbHelper;
+
     private Clothes clothesForAdding; // from view
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +68,8 @@ public class AddingClothesFragment extends DialogFragment {
 
         // задаем диалог окну вид (=фрагмент)
         final View view = inflater.inflate(R.layout.fragment_adding_clothes, null);
+
+        textViewName = (TextView) view.findViewById(R.id.name_for_adding_clothes);
 
         //делаем спиннер
         spinner = (Spinner) view.findViewById(R.id.clothes_type);
@@ -108,7 +116,18 @@ public class AddingClothesFragment extends DialogFragment {
                 // получаем элемент GridView
                 GridView clothesGridView = (GridView) getActivity().findViewById(R.id.clothes_list);
 
-                addPictureToGrid(view);
+                getDataFromView(view);
+
+                clearDataBase();
+                writeToDataBase();
+                readFromDataBase();
+                // закрываем подключение к БД
+                dbHelper.close();
+
+                Toast.makeText(getActivity(), "Добавление успешно", Toast.LENGTH_LONG) //FIXME
+                        .show();
+
+                //TODO: к таблице прикрепить слушателей, которые будут обновлять данные
 
                 // отображаем новую таблицу
                 clothesGridView.setAdapter(new ClothesAdapter(getActivity(),
@@ -118,7 +137,87 @@ public class AddingClothesFragment extends DialogFragment {
         return builder.create();
     }
 
-//    private String path = getContext().getFilesDir().toString() + "/Clothes/"; // путь к папке с одеждой
+    public void writeToDataBase(){
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+
+        // подготовим данные для вставки в виде пар: наименование столбца - значение
+        contentValues.put(DBHelper.KEY_NAME, name);
+        contentValues.put(DBHelper.KEY_TYPE, type);
+        contentValues.put(DBHelper.KEY_PICTURE, imageUri.toString());
+
+        Log.d( "mLog", "name = " + name +
+                ", type = " + type +
+                ", picture = " + imageUri.toString());
+
+        // вставляем запись
+        database.insert(DBHelper.TABLE_CLOTHES, null, contentValues);
+
+            Log.d("mLog", "ROW INSERTED " +
+                        "name = " + contentValues.get(DBHelper.KEY_NAME) +
+                        ", type = " + contentValues.get(DBHelper.KEY_TYPE) +
+                        ", picture = " + contentValues.get(DBHelper.KEY_PICTURE)
+                );
+    }
+
+    public void readFromDataBase(){
+        // подключаемся к БД
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+        // делаем запрос всех данных из таблицы table_clothes, получаем Cursor
+        Cursor cursor = database.query(DBHelper.TABLE_CLOTHES, null, null,
+                null, null, null, null);
+
+        // ставим позицию курсора на первую строку выборки
+        // если в выборке нет строк, вернется false
+        if (cursor.moveToFirst()){
+            // определяем номера столбцов по имени в выборке
+            int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
+            int nameIndex = cursor.getColumnIndex(DBHelper.KEY_NAME);
+            int typeIndex = cursor.getColumnIndex(DBHelper.KEY_TYPE);
+            int pictureIndex = cursor.getColumnIndex(DBHelper.KEY_PICTURE);
+
+            do {
+                Log.d("mLog", "ID = " + cursor.getInt(idIndex) +
+                        ", name = " + cursor.getString(nameIndex) +
+                        ", type = " + cursor.getString(typeIndex) +
+                        ", picture = " + cursor.getString(pictureIndex));
+
+                WorkClothes.addClothes(new Clothes(
+                        cursor.getString(nameIndex),
+                        cursor.getString(typeIndex),
+                        Uri.parse(cursor.getString(pictureIndex))
+                ));
+
+            } while (cursor.moveToNext());
+        } else
+            Log.d("mLog","0 rows");
+    }
+
+    public void clearDataBase(){
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        database.delete(DBHelper.TABLE_CLOTHES, null, null);
+    }
+
+    TextView textViewName;
+
+    private void getDataFromView(View view){
+        // считываем название одежды
+        name = textViewName.getText().toString();
+
+        // считываем тип одежды (в спиннере)
+        type = spinner.getSelectedItem().toString();
+
+        imageUri = savePictureAndGetUri(); // путь до картинки
+
+        //добавляем в список всех одежд (парсим path to Uri)
+        /*WorkClothes.addClothes(new Clothes("test clth" + MainActivity.fileName,
+                Uri.parse(path + fileName)));*/
+
+        //Clothes cloth = new Clothes(name, type, imageUri);
+        //WorkClothes.addClothes(cloth); // добавляем в общий список
+    }
 
     /**
      *
@@ -141,23 +240,6 @@ public class AddingClothesFragment extends DialogFragment {
         return Uri.parse(path + fileName);
     }
 
-    private void addPictureToGrid(View view){
-        // считываем название одежды
-        TextView textViewName = (TextView) view.findViewById(R.id.name_for_adding_clothes);
-        String name = textViewName.getText().toString();
-
-        // считываем тип одежды (в спиннере)
-        String type = spinner.getSelectedItem().toString();
-
-        Uri imageUri = savePictureAndGetUri(); // путь до картинки
-
-        //добавляем в список всех одежд (парсим path to Uri)
-        /*WorkClothes.addClothes(new Clothes("test clth" + MainActivity.fileName,
-                Uri.parse(path + fileName)));*/
-
-        Clothes cloth = new Clothes(name, type, imageUri);
-        WorkClothes.addClothes(cloth); // добавляем в общий список
-    }
 
     private void createDirectoryAndSaveFile(Bitmap imageToSave, String fileName){
         String path = getContext().getFilesDir().toString();
@@ -212,12 +294,14 @@ public class AddingClothesFragment extends DialogFragment {
 
         return true;
     }
+
+
     /**
      * считываем данные с окошка ввода
      * @param view
      * @return объект типа clothes
      */
-    private Clothes getDataFromView(View view){
+    private Clothes getDataFromViewToDataBase(View view){
         // считываем название одежды
         TextView textViewName = (TextView) view.findViewById(R.id.name_for_adding_clothes);
         String name = textViewName.getText().toString();

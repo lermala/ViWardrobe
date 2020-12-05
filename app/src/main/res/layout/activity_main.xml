@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:readPermission="com.example.myapplication.READ_EXTERNAL_STORAGE"
     android:id="@+id/activity_main">
 
     <FrameLayout
@@ -24,28 +23,28 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:onClick="Change"
-                android:text="Calendar" />
+                android:text="Календарь" />
 
             <Button
                 android:id="@+id/menu_wardrobe"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:onClick="Change"
-                android:text="WARDROBE" />
+                android:text="Гардероб" />
 
             <Button
                 android:id="@+id/menu_looks"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:onClick="Change"
-                android:text="LOOKS" />
+                android:text="Луки" />
 
             <Button
                 android:id="@+id/menu_profile"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:onClick="Change"
-                android:text="MY PROFILE" />
+                android:text="Профиль" />
 
         </TableRow>
     </TableLayout>
