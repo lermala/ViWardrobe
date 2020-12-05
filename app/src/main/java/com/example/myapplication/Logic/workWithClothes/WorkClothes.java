@@ -2,12 +2,13 @@ package com.example.myapplication.Logic.workWithClothes;
 
 import android.widget.ListView;
 
+import com.example.myapplication.MainActivity;
+
 import java.util.ArrayList;
 
 public class WorkClothes{
 
-    // TODO: сделать НЕ создание нового списка, а загрузку старого
-    private static ArrayList<Clothes> clothes = new ArrayList<>();
+    private static ArrayList<Clothes> clothes = MainActivity.dbHelper.readAllFromDataBase();
 
     private ListView clothesListView;
     private String[] types = Clothes.getTypes();
@@ -38,6 +39,10 @@ public class WorkClothes{
                 filteredList.add(el);
         }
         return filteredList;
+    }
+
+    public static void update(){
+        clothes = MainActivity.dbHelper.readAllFromDataBase();
     }
 
 

@@ -11,10 +11,13 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.GridView;
 
 import com.example.myapplication.Logic.workWithClothes.Clothes;
+import com.example.myapplication.Logic.workWithClothes.ClothesAdapter;
 import com.example.myapplication.Logic.workWithClothes.DBHelper;
 import com.example.myapplication.Logic.workWithClothes.WorkClothes;
+import com.example.myapplication.fileWork.FileWork;
 import com.example.myapplication.menuFragments.Dialogs.AddingClothesFragment;
 import com.example.myapplication.menuFragments.CalendarFragment;
 import com.example.myapplication.menuFragments.Dialogs.FragmentAddingLooks;
@@ -28,19 +31,26 @@ import java.io.FileOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
+    // TODO: Сейчас при добавлении/удалении элемента одежды происходит загрузка списка с нуля,
+    // нужно сделать так, чтобы к существующей таблице добавлялось.
+
     private static final String TAG = "MAIN ACTIVITY | "; // 4 debugging
 
-    public static int fileName = 0; // FIXME
     public static DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         dbHelper = new DBHelper(this);
+        //dbHelper.deleteAll();
+
+        FileWork fileWork = new FileWork(this);
+        //fileWork.deleteAllImagesClothes();
+
         addFirstFragment();
     }
-
 
     /*загрузка 1-го фрагмента*/
     private void addFirstFragment(){

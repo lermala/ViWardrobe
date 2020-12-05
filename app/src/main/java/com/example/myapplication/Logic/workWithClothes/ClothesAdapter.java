@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class ClothesAdapter extends ArrayAdapter<Clothes> {
 
-    private static final String TAG = "ADapter clothes | ";
+    private static final String TAG = " ADapter clothes | ";
 
     private LayoutInflater inflater;
     private int layout;
@@ -43,7 +43,9 @@ public class ClothesAdapter extends ArrayAdapter<Clothes> {
         Clothes cloth = clothes.get(position);
 
      //   flagView.setImageResource(cloth.getImage());
-        Log.i(TAG, "cloth: "  + cloth.toString());
+        //Log.i(TAG, "cloth: "  + cloth.toString());
+      //  Log.i(TAG, "name: "  + cloth.getName() + " type="
+      //  + cloth.getType() + " uri=" + cloth.getImageUri().toString());
 
         flagView.setImageURI(cloth.getImageUri());
 

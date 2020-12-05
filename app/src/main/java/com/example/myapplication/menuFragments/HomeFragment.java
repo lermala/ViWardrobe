@@ -19,6 +19,8 @@ import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.fileWork.FileWork;
 import com.example.myapplication.menuFragments.Dialogs.ClothesDialogFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
@@ -34,6 +36,9 @@ public class HomeFragment extends Fragment {
     private ArrayList<Clothes> clothes = WorkClothes.getAllClothes();
     private GridView clothesGridView;
 
+    //номер элемента в gridview. появляется при длительном нажатии
+    private int contextMenuGridPosition;
+
     //context menu items:
     public static final int IDM_A = 101; //deleting
     public static final int IDM_B = 102;
@@ -42,7 +47,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
         return view;
     }
 
@@ -50,15 +54,14 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         getActivity().setTitle("Мой гардероб");
-
         // получаем элемент GridView
         clothesGridView = (GridView) getActivity().findViewById(R.id.clothes_list);
-        // создаем адаптер
-        //ClothesAdapter clothesAdapter = new ClothesAdapter(getActivity(),
-        //        R.layout.list_item, clothes);
-        // устанавливаем адаптер
-        //clothesGridView.setAdapter(clothesAdapter);
-        // слушатель выбора в списке
+
+        // загружаем значения с БД (стартовая загрузка)
+        clothesGridView.setAdapter( new ClothesAdapter(getActivity(),
+                R.layout.list_item,
+                clothes
+        ));
 
         //СЛУШАТЕЛЬ ДЛЯ НАЖАТИЙ НА ЭЛЕМЕНТ ТАБЛИЦЫ
         AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
@@ -73,12 +76,7 @@ public class HomeFragment extends Fragment {
             }
         };
 
-        //////new
-
-        //AdapterView.OnCreateContextMenuListener itemContextMenuListener
-        registerForContextMenu(clothesGridView);
-
-        //-----------
+        registerForContextMenu(clothesGridView); // подключаем контекстное меню к таблице
 
         // подключаем слушатель к итемам
         clothesGridView.setOnItemClickListener(itemListener);
@@ -127,8 +125,6 @@ public class HomeFragment extends Fragment {
         //------------------------END_СПИНЕР---------------------------
     }
 
-    private int contextMenuGridPosition; //номер элемента в gridview. появляется при длительном нажатии
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
@@ -145,39 +141,17 @@ public class HomeFragment extends Fragment {
             case IDM_A:
                 // TODO: добавить "Точно ли хотите удалить?" да/нет
 
-                // ДЛЯ ПРОВЕРКИ
-                String path = getContext().getFilesDir().toString();
-                File directory = new File(path + "/Clothes");
-                File[] files = directory.listFiles();
-                Log.d("Files", "Size BEFORE: "+ files.length);
-                for (int i = 0; i < files.length; i++)
-                {
-                    Log.d("Files", "FileName:" + files[i].getName());
-                }
+                FileWork fileWork = new FileWork(getContext());
+                fileWork.deleteImage(WorkClothes.getClothes(contextMenuGridPosition)
+                        .getImageUri()); // удаляем картинку из папки
 
+                Log.d("Files", "contextMenuGridPosition=" + contextMenuGridPosition); // FIXME delete
 
-                // получаем путь до картинки этого элемента
-                Uri imgUri = WorkClothes.getClothes(contextMenuGridPosition).getImageUri();
-                File file = new File(String.valueOf(imgUri));
-
-                // Удаляем фото из папки с картинками
-                if (file.delete()){
-                    Log.i(TAG,"del OK");
-                }
-                else Log.i(TAG,"del is not OK");
-
-                WorkClothes.deleteCloth(contextMenuGridPosition); //удаляем из списка
-
-                // ДЛЯ ПРОВЕРКИ
-                files = directory.listFiles();
-                Log.d("Files", "Size AFTER: "+ files.length);
-                for (int i = 0; i < files.length; i++)
-                {
-                    Log.d("Files", "FileName:" + files[i].getName());
-                }
+                MainActivity.dbHelper.deleteCloth(contextMenuGridPosition + 1); // удаляем из БД
+                WorkClothes.update(); // обновляем список
 
                 // отображаем новую таблицу
-                clothesGridView.setAdapter(new ClothesAdapter(getActivity(),
+                clothesGridView.setAdapter(new ClothesAdapter(getActivity(), // FIXME change
                         R.layout.list_item, WorkClothes.getAllClothes()));
 
                 Toast.makeText(getActivity(), "Удаление завершено", Toast.LENGTH_LONG)

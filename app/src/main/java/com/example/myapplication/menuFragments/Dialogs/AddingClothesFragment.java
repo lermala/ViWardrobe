@@ -1,12 +1,8 @@
 package com.example.myapplication.menuFragments.Dialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,9 +29,6 @@ import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
 import com.example.myapplication.fileWork.FileWork;
-
-import java.io.File;
-import java.io.FileOutputStream;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -118,11 +111,10 @@ public class AddingClothesFragment extends DialogFragment {
 
                 getDataFromView(view);
 
-                clearDataBase();
-                writeToDataBase();
-                readFromDataBase();
-                // закрываем подключение к БД
-                dbHelper.close();
+
+                dbHelper.writeToDataBase(name, type, imageUri.toString());
+                WorkClothes.update();
+                //dbHelper.readAllFromDataBase();
 
                 Toast.makeText(getActivity(), "Добавление успешно", Toast.LENGTH_LONG) //FIXME
                         .show();
@@ -131,73 +123,10 @@ public class AddingClothesFragment extends DialogFragment {
 
                 // отображаем новую таблицу
                 clothesGridView.setAdapter(new ClothesAdapter(getActivity(),
-                        R.layout.list_item, WorkClothes.getAllClothes()));
+                        R.layout.list_item, dbHelper.readAllFromDataBase()));
             }
         });
         return builder.create();
-    }
-
-    public void writeToDataBase(){
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-
-        // подготовим данные для вставки в виде пар: наименование столбца - значение
-        contentValues.put(DBHelper.KEY_NAME, name);
-        contentValues.put(DBHelper.KEY_TYPE, type);
-        contentValues.put(DBHelper.KEY_PICTURE, imageUri.toString());
-
-        Log.d( "mLog", "name = " + name +
-                ", type = " + type +
-                ", picture = " + imageUri.toString());
-
-        // вставляем запись
-        database.insert(DBHelper.TABLE_CLOTHES, null, contentValues);
-
-            Log.d("mLog", "ROW INSERTED " +
-                        "name = " + contentValues.get(DBHelper.KEY_NAME) +
-                        ", type = " + contentValues.get(DBHelper.KEY_TYPE) +
-                        ", picture = " + contentValues.get(DBHelper.KEY_PICTURE)
-                );
-    }
-
-    public void readFromDataBase(){
-        // подключаемся к БД
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-
-        // делаем запрос всех данных из таблицы table_clothes, получаем Cursor
-        Cursor cursor = database.query(DBHelper.TABLE_CLOTHES, null, null,
-                null, null, null, null);
-
-        // ставим позицию курсора на первую строку выборки
-        // если в выборке нет строк, вернется false
-        if (cursor.moveToFirst()){
-            // определяем номера столбцов по имени в выборке
-            int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
-            int nameIndex = cursor.getColumnIndex(DBHelper.KEY_NAME);
-            int typeIndex = cursor.getColumnIndex(DBHelper.KEY_TYPE);
-            int pictureIndex = cursor.getColumnIndex(DBHelper.KEY_PICTURE);
-
-            do {
-                Log.d("mLog", "ID = " + cursor.getInt(idIndex) +
-                        ", name = " + cursor.getString(nameIndex) +
-                        ", type = " + cursor.getString(typeIndex) +
-                        ", picture = " + cursor.getString(pictureIndex));
-
-                WorkClothes.addClothes(new Clothes(
-                        cursor.getString(nameIndex),
-                        cursor.getString(typeIndex),
-                        Uri.parse(cursor.getString(pictureIndex))
-                ));
-
-            } while (cursor.moveToNext());
-        } else
-            Log.d("mLog","0 rows");
-    }
-
-    public void clearDataBase(){
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-        database.delete(DBHelper.TABLE_CLOTHES, null, null);
     }
 
     private void getDataFromView(View view){
@@ -221,53 +150,6 @@ public class AddingClothesFragment extends DialogFragment {
 
         //Clothes cloth = new Clothes(name, type, imageUri);
         //WorkClothes.addClothes(cloth); // добавляем в общий список
-    }
-
-    /**
-     *
-     * @return Имя файла (картинки)
-     */
-    private Uri savePictureAndGetUri(){
-        String path = getContext().getFilesDir().toString() + "/Clothes/"; // путь к папке с одеждой
-
-        String fileName = MainActivity.fileName + "";
-
-        // TODO: ПОМЕНЯТЬ FILENAME( MainActivity.fileName )
-        // Картинка (считываем с imageView, а не берем uri, т.к. сохраняем в Bitmap, который
-        // переворачивается (из-за кэша, который я не знаю как удалить))
-        Bitmap image = ( (BitmapDrawable)imageView.getDrawable() ).getBitmap();
-
-       // createDirectoryAndSaveFile(image, fileName); // save
-
-        MainActivity.fileName++; // можно сделать имя зависимым от времени + даты // FIXME
-
-        return Uri.parse(path + fileName);
-    }
-
-
-    private void createDirectoryAndSaveFile(Bitmap imageToSave, String fileName){
-        String path = getContext().getFilesDir().toString();
-
-        File direct = new File(getContext().getFilesDir(), "/Clothes");
-
-        if (!direct.exists()) {
-            File imageClothesDir = new File(path + "/Clothes/");
-            imageClothesDir.mkdirs();
-        }
-
-        File file = new File(new File(path + "/Clothes/"), fileName);
-
-        if (file.exists()) {
-            file.delete();
-        }
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -299,7 +181,6 @@ public class AddingClothesFragment extends DialogFragment {
         return true;
     }
 
-
     /**
      * считываем данные с окошка ввода
      * @param view
@@ -323,7 +204,6 @@ public class AddingClothesFragment extends DialogFragment {
         Clothes cloth = new Clothes(name, type, selectedImageUri);
         return cloth;
     }
-
 
     static final int GALLERY_REQUEST = 1; // для галлереи
 

@@ -3,20 +3,23 @@ package com.example.myapplication.fileWork;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.util.Log;
-import android.view.View;
+import android.widget.Toast;
 
+import com.example.myapplication.Logic.workWithClothes.ClothesAdapter;
+import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class FileWork {
-    private static final String TAG = "ADDING CLOTHES | "; // FIXME
+    private static final String TAG = "FILE WORK | "; // FIXME
 
     private Context context;
     final File PATH_ALL_FILES; // путь до внутренней папки
@@ -39,14 +42,27 @@ public class FileWork {
      *
      * @return Имя файла (картинки)
      */
-    public Uri savePictureAndGetUri(Bitmap image){
+  /*  public Uri savePictureAndGetUri(Bitmap image){
         String fileName = "/" + MainActivity.fileName + "";
 
-        // TODO: ПОМЕНЯТЬ FILENAME( MainActivity.fileName )
+        String uniqueString = UUID.randomUUID().toString();
 
-        createDirectoryAndSaveFile(image, fileName); // save
+        createDirectoryAndSaveFile(image, uniqueString); // save
 
-        MainActivity.fileName++; // можно сделать имя зависимым от времени + даты // FIXME
+        MainActivity.fileName++; // можно сделать имя зависимым от времени + даты
+
+        Log.i(TAG,"Uri.parse PATH_CLOTHES  " + PATH_CLOTHES.toString() + fileName);
+
+        return Uri.parse(PATH_CLOTHES.toString() + fileName);
+    }*/
+
+    public Uri savePictureAndGetUri(Bitmap image){
+        String uniqueString = UUID.randomUUID().toString(); // генерируем имя файла
+        String fileName = "/" + uniqueString + "";
+
+        createDirectoryAndSaveFile(image, uniqueString); // save
+
+       // MainActivity.fileName++; // можно сделать имя зависимым от времени + даты // FIXME
 
         Log.i(TAG,"Uri.parse PATH_CLOTHES  " + PATH_CLOTHES.toString() + fileName);
 
@@ -71,8 +87,38 @@ public class FileWork {
         }
     }
 
+    public void deleteAllImagesClothes(){
+        File[] files = PATH_CLOTHES.listFiles();
 
+        for (int i = 0; i < files.length; i++)
+            files[i].delete();
 
+        logCheck();
+    }
+
+    public void logCheck(){
+        File[] files = PATH_CLOTHES.listFiles();
+        Log.d("Files", "Size BEFORE: "+ files.length);
+
+        for (int i = 0; i < files.length; i++)
+            Log.d("Files", "FileName:" + files[i].getName());
+    }
+
+    public void deleteImage(Uri imgUri){
+        logCheck();
+
+        // получаем путь до картинки этого элемента
+       // Uri imgUri = WorkClothes.getClothes(idForDel).getImageUri();
+        File file = new File(String.valueOf(imgUri));
+
+        // Удаляем фото из папки с картинками
+        if (file.delete()){
+            Log.i(TAG,"del OK");
+        }
+        else Log.i(TAG,"del is not OK");
+
+        logCheck();
+    }
 
 
     /*метод для получения имен файлов в подпапке assets*/
