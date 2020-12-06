@@ -22,7 +22,6 @@ public class Clothes{
     }
 
     private static final String[] types = {
-            //TODO: убрать "Все" и возможно переделать из стринг в enum
             "Все",
             "Верхняя одежда",
             "Джемперы и кардиганы",
@@ -35,9 +34,9 @@ public class Clothes{
             "Жакеты - пиджаки",
             "Юбки - шорты",
             "Аксессуары",
+            "Сумки",
             "Обувь"
     };
-
 
     public Clothes(String name, String type, Uri imageUri) {
         this.name = name;
@@ -45,13 +44,7 @@ public class Clothes{
         this.imageUri = imageUri;
     }
 
-
-
-
-
     //--------------------------------
-
-
 
     public String getName() {
         return name;

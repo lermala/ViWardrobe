@@ -1,84 +1,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="match_parent"
-    android:layout_margin="10dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/image_clothes"
-            android:scaleType="centerCrop"
-            android:background="@color/grey2"
-            android:src="@drawable/ava"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_width="100dp"
-            android:layout_height="100dp"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:text="Валерия Колодина"
-                android:textSize="22sp"
-                android:layout_marginBottom="10dp"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
-
-            <TextView
-                android:text="Россия, Иркутск"
-                android:layout_marginBottom="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="50dp"
+    >
 
     <TextView
-        android:text="kolodina.lera322@mail.ru"
+        android:id="@+id/profile_name"
+        android:text="Имя"
+        android:textSize="22sp"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+
+    <TextView
+        android:id="@+id/profile_mail"
+        android:text="Email"
         android:layout_marginBottom="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"/>
+        android:textSize="22sp"/>
 
     <TextView
-        android:text="07.03.2001"
+        android:id="@+id/profile_date"
+        android:text="Дата рождения"
         android:layout_marginBottom="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Редактировать профиль"/>
+        android:textSize="22sp"/>
 
     <TextView
         android:id="@+id/count_of_clothes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="45dp"
         android:text="Всего предметов одежды: 0"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="15dp"
-        android:textSize="18sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Всего луков: 0"
-        android:layout_marginBottom="15dp"
-        android:textSize="18sp"/>
+        android:textSize="20sp"/>
 
     <Button
+        android:id="@+id/profile_btn_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:text="Показать полную статистику"/>
+        android:onClick="onClickEditProfile"
+        android:layout_gravity="center"
+        android:text="Редактировать"/>
+
 
 
 

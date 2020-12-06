@@ -1,6 +1,5 @@
 package com.example.myapplication.menuFragments;
 
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -25,9 +24,8 @@ import com.example.myapplication.menuFragments.Dialogs.ClothesDialogFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
 import com.example.myapplication.Logic.workWithClothes.ClothesAdapter;
-import com.example.myapplication.Logic.workWithClothes.WorkClothes;
+import com.example.myapplication.Logic.workWithClothes.Data.WorkClothes;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
@@ -54,6 +52,7 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         getActivity().setTitle("Мой гардероб");
+
         // получаем элемент GridView
         clothesGridView = (GridView) getActivity().findViewById(R.id.clothes_list);
 
@@ -84,9 +83,11 @@ public class HomeFragment extends Fragment {
 
         //------------------------СПИНЕР---------------------------
         Spinner spinner = (Spinner) getActivity().findViewById(R.id.home_filter);
+
         // Создаем адаптер ArrayAdapter с помощью массива строк и стандартной разметки элемета spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, Clothes.getTypes());
+
         // Определяем разметку для использования при выборе элемента
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);// Применяем адаптер к элементу spinner

@@ -1,4 +1,4 @@
-package com.example.myapplication.Logic.workWithClothes;
+package com.example.myapplication.Logic.workWithClothes.Data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,8 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.myapplication.Logic.workWithClothes.Clothes;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 

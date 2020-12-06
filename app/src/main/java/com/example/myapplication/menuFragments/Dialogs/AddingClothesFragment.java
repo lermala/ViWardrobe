@@ -23,8 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.Logic.workWithClothes.ClothesAdapter;
-import com.example.myapplication.Logic.workWithClothes.DBHelper;
-import com.example.myapplication.Logic.workWithClothes.WorkClothes;
+import com.example.myapplication.Logic.workWithClothes.Data.DBHelper;
+import com.example.myapplication.Logic.workWithClothes.Data.WorkClothes;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
@@ -66,13 +66,17 @@ public class AddingClothesFragment extends DialogFragment {
 
         //делаем спиннер
         spinner = (Spinner) view.findViewById(R.id.clothes_type);
+
         // Создаем адаптер ArrayAdapter с помощью массива строк и стандартной разметки элемета spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, Clothes.getTypes());
+
         // Определяем разметку для использования при выборе элемента
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         // Применяем адаптер к элементу spinner
         spinner.setAdapter(adapter);
+        spinner.setSelection(1); // ставим значение по умолчанию
 
         //------загрузка фото юзером
         imageView = (ImageView) view.findViewById(R.id.image_for_adding_clothes);
@@ -110,7 +114,6 @@ public class AddingClothesFragment extends DialogFragment {
                 GridView clothesGridView = (GridView) getActivity().findViewById(R.id.clothes_list);
 
                 getDataFromView(view);
-
 
                 dbHelper.writeToDataBase(name, type, imageUri.toString());
                 WorkClothes.update();

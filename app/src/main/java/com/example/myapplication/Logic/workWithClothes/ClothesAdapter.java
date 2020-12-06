@@ -8,9 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-
-import android.net.Uri;
-
 import com.example.myapplication.R;
 
 import java.util.ArrayList;

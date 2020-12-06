@@ -12,13 +12,8 @@ public class Look {
     private int image;
     private ArrayList<Clothes> clothes;
 
-
     public Look(ArrayList<Clothes> clothes) {
         this.clothes = clothes; //в этом случае придется создавать картинку, состоящую из картинок каждого из предметов
-    }
-
-    public Look() {
-        initLooks();//TODO: УДАЛИТЬ
     }
 
     public Look(int image) {
@@ -41,14 +36,5 @@ public class Look {
         this.clothes = clothes;
     }
 
-    public void initLooks(){//TODO: УДАЛИТЬ
-        looks.add(new Look(R.drawable.look1));
-        looks.add(new Look(R.drawable.look2));
-        looks.add(new Look(R.drawable.look3));
-        looks.add(new Look(R.drawable.look4));
-        looks.add(new Look(R.drawable.look1));
-        looks.add(new Look(R.drawable.look2));
-        looks.add(new Look(R.drawable.look3));
-        looks.add(new Look(R.drawable.look4));
-    }
+
 }

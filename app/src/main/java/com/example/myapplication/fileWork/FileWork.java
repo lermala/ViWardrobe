@@ -5,12 +5,6 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.example.myapplication.Logic.workWithClothes.ClothesAdapter;
-import com.example.myapplication.Logic.workWithClothes.WorkClothes;
-import com.example.myapplication.MainActivity;
-import com.example.myapplication.R;
 
 import java.io.File;
 import java.io.FileOutputStream;

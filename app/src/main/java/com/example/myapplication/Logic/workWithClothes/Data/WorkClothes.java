@@ -1,7 +1,8 @@
-package com.example.myapplication.Logic.workWithClothes;
+package com.example.myapplication.Logic.workWithClothes.Data;
 
 import android.widget.ListView;
 
+import com.example.myapplication.Logic.workWithClothes.Clothes;
 import com.example.myapplication.MainActivity;
 
 import java.util.ArrayList;

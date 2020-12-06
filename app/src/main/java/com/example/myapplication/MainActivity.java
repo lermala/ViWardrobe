@@ -6,65 +6,82 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.GridView;
+import android.widget.Toast;
 
-import com.example.myapplication.Logic.workWithClothes.Clothes;
-import com.example.myapplication.Logic.workWithClothes.ClothesAdapter;
-import com.example.myapplication.Logic.workWithClothes.DBHelper;
-import com.example.myapplication.Logic.workWithClothes.WorkClothes;
-import com.example.myapplication.fileWork.FileWork;
+import com.example.myapplication.Logic.UsersPack.User;
+import com.example.myapplication.Logic.workWithClothes.Data.DBHelper;
 import com.example.myapplication.menuFragments.Dialogs.AddingClothesFragment;
 import com.example.myapplication.menuFragments.CalendarFragment;
 import com.example.myapplication.menuFragments.Dialogs.FragmentAddingLooks;
 import com.example.myapplication.menuFragments.Dialogs.TagsDialogFragment;
 import com.example.myapplication.menuFragments.HomeFragment;
+import com.example.myapplication.menuFragments.LoginFragment;
 import com.example.myapplication.menuFragments.LooksFragment;
 import com.example.myapplication.menuFragments.ProfileFragment;
 
-import java.io.File;
-import java.io.FileOutputStream;
-
 public class MainActivity extends AppCompatActivity {
 
-    // TODO: Сейчас при добавлении/удалении элемента одежды происходит загрузка списка с нуля,
-    // нужно сделать так, чтобы к существующей таблице добавлялось.
+    // TODO: 1) Сейчас при добавлении/удалении элемента одежды происходит загрузка списка с нуля,
+    // TODO: нужно сделать так, чтобы к существующей таблице добавлялось.
 
     private static final String TAG = "MAIN ACTIVITY | "; // 4 debugging
 
     public static DBHelper dbHelper;
+
+    public static User user;
+
+    LoginFragment loginFragment;
+
+    // это будет именем файла настроек
+    public static final String APP_PREFERENCES = "Settings";
+    public static final String APP_PREFERENCES_NAME = "Name";
+    public static final String APP_PREFERENCES_MAIL = "Mail";
+    public static final String APP_PREFERENCES_DATE = "Date";
+
+    public static SharedPreferences Settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Settings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+
+        if(!Settings.contains(APP_PREFERENCES_NAME)) { // не авторизован
+            loginFragment = new LoginFragment();
+            openFragment(loginFragment);
+            return;
+        }
+
+        // если авторизован:
+        user = new User(
+                Settings.getString(MainActivity.APP_PREFERENCES_NAME, ""),
+                Settings.getString(MainActivity.APP_PREFERENCES_MAIL, ""),
+                Settings.getString(MainActivity.APP_PREFERENCES_DATE, "")
+        );
+
         dbHelper = new DBHelper(this);
         //dbHelper.deleteAll();
 
-        FileWork fileWork = new FileWork(this);
+        //FileWork fileWork = new FileWork(this);
         //fileWork.deleteAllImagesClothes();
 
-        addFirstFragment();
+        //addFirstFragment();
+        openFragment(new HomeFragment());
     }
 
-    /*загрузка 1-го фрагмента*/
-    private void addFirstFragment(){
-        // получаем экземпляр FragmentTransaction
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager
-                .beginTransaction();
+    private void openFragment(Fragment fragment){
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
 
-        // добавляем фрагмент
-        HomeFragment homeFragment = new HomeFragment();
-        fragmentTransaction.add(R.id.container, homeFragment);
-        fragmentTransaction.commit();
+        ft.replace(R.id.container, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
-
 
     // открытие диалогового окна для добавления ЛУКОВ
     public void openDialogLook(View view){
@@ -72,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentAddingLooks fragmentAddingLooks = new FragmentAddingLooks();
         fragmentAddingLooks.show(manager, "dialog");
     }
-
 
     // открытие диалогового окна для тэгов
     public void openDialogTags(View view){
@@ -107,13 +123,49 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        FragmentManager fm = getSupportFragmentManager();
+        /*FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.container, fragment);
         ft.addToBackStack(null);
-        ft.commit();
+        ft.commit();*/
+        openFragment(fragment);
     }
 
+    public void onClickLogin(View view){
+        user = loginFragment.getUserData();
+        if (user == null){ // некорректный ввод
+            showToast("Введите данные");
+        } else if (!Settings.contains(APP_PREFERENCES_NAME)){// все ок (первый вход)
+            writeSettings();
+            dbHelper = new DBHelper(this);
+            openFragment(new HomeFragment());
+        } else {
+            // меняем настройки
+            writeSettings();
+            // выводим сообщение
+            showToast("Данные изменены");
+            // открываем фрагмент "профиль"
+            openFragment(new ProfileFragment());
+        }
+    }
 
+    public void showToast(String message){
+        Toast toast = Toast.makeText(getApplicationContext(),
+                message, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    public void writeSettings(){
+        SharedPreferences.Editor editor = Settings.edit();
+        editor.putString(APP_PREFERENCES_NAME, user.getName());
+        editor.putString(APP_PREFERENCES_MAIL, user.getMail());
+        editor.putString(APP_PREFERENCES_DATE, user.getDate());
+        editor.apply();
+    }
+
+    public void onClickEditProfile(View view){
+        loginFragment = new LoginFragment();
+        openFragment(loginFragment);
+    }
 
 }

@@ -4,17 +4,16 @@ import android.net.Uri;
 
 public class User {
     private String name;
-    private String city;
+   // private String city;
     private Uri photoUri;
     private String mail;
-    private String password;
+    private String date;
+   // private String password;
 
-    public User(String name, String city, Uri photoUri, String mail, String password) {
+    public User(String name, String mail, String date) {
         this.name = name;
-        this.city = city;
-        this.photoUri = photoUri;
         this.mail = mail;
-        this.password = password;
+        this.date = date;
     }
 
     public String getName() {
@@ -23,14 +22,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public Uri getPhotoUri() {
@@ -49,11 +40,11 @@ public class User {
         this.mail = mail;
     }
 
-    public String getPassword() {
-        return password;
+    public String getDate() {
+        return date;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDate(String date) {
+        this.date = date;
     }
 }
