@@ -35,8 +35,6 @@ public class LooksFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        // начальная инициализация списка
-        initLooks();
         // получаем элемент GridView
         looksGridView = (GridView) getActivity().findViewById(R.id.clothes_list);
         // создаем адаптер
@@ -58,14 +56,5 @@ public class LooksFragment extends Fragment {
         looksGridView.setOnItemClickListener(itemListener);
     }
 
-    public void initLooks(){
-        looks.add(new Look(R.drawable.look1));
-        looks.add(new Look(R.drawable.look2));
-        looks.add(new Look(R.drawable.look3));
-        looks.add(new Look(R.drawable.look4));
-        looks.add(new Look(R.drawable.look1));
-        looks.add(new Look(R.drawable.look2));
-        looks.add(new Look(R.drawable.look3));
-        looks.add(new Look(R.drawable.look4));
-    }
+
 }
