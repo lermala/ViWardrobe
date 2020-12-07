@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +12,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.myapplication.Logic.UsersPack.User;
-import com.example.myapplication.Logic.workWithClothes.Data.DBHelper;
+import com.example.myapplication.db.DBHelper;
+import com.example.myapplication.fileWork.FileWork;
 import com.example.myapplication.menuFragments.Dialogs.AddingClothesFragment;
 import com.example.myapplication.menuFragments.CalendarFragment;
 import com.example.myapplication.menuFragments.Dialogs.FragmentAddingLooks;
@@ -25,16 +25,14 @@ import com.example.myapplication.menuFragments.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    // TODO: 1) Сейчас при добавлении/удалении элемента одежды происходит загрузка списка с нуля,
-    // TODO: нужно сделать так, чтобы к существующей таблице добавлялось.
+    // TODO: оптимизировать фильтрацию
 
     private static final String TAG = "MAIN ACTIVITY | "; // 4 debugging
 
-    public static DBHelper dbHelper;
-
-    public static User user;
-
     LoginFragment loginFragment;
+
+    public static DBHelper dbHelper;
+    public static User user;
 
     // это будет именем файла настроек
     public static final String APP_PREFERENCES = "Settings";
@@ -65,9 +63,11 @@ public class MainActivity extends AppCompatActivity {
         );
 
         dbHelper = new DBHelper(this);
+        dbHelper.readAllFromDataBase();
         //dbHelper.deleteAll();
 
-        //FileWork fileWork = new FileWork(this);
+        FileWork fileWork = new FileWork(this);
+        fileWork.logCheck();
         //fileWork.deleteAllImagesClothes();
 
         //addFirstFragment();
@@ -100,8 +100,9 @@ public class MainActivity extends AppCompatActivity {
     //событие для кнопки "Добавить" (одежду)
     public void AddClothes(View view){
         FragmentManager manager = getSupportFragmentManager();
-        AddingClothesFragment myDialogFragment = new AddingClothesFragment();
+        AddingClothesFragment myDialogFragment = new AddingClothesFragment("Добавить одежду");
         myDialogFragment.show(manager, "dialog");
+        myDialogFragment.setCancelable(false); // запрет выключения на клик вне окна
     }
 
     /*Метод для изменения наполнения контента фрагментов/ измена текущ фрагмента*/

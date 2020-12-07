@@ -19,6 +19,9 @@ import com.example.myapplication.Logic.workWithLooks.LookAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * В РАЗРАБОТКЕ
+ */
 public class LooksFragment extends Fragment {
 
     private List<Look> looks = new ArrayList<>();

@@ -20,26 +20,32 @@ import android.widget.Toast;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.fileWork.FileWork;
+import com.example.myapplication.menuFragments.Dialogs.AddingClothesFragment;
 import com.example.myapplication.menuFragments.Dialogs.ClothesDialogFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.Logic.workWithClothes.Clothes;
 import com.example.myapplication.Logic.workWithClothes.ClothesAdapter;
-import com.example.myapplication.Logic.workWithClothes.Data.WorkClothes;
+import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 
 import java.util.ArrayList;
 
+/**
+ * Фрагмент со всей одеждой "Гардероб"
+ */
 public class HomeFragment extends Fragment {
     private static final String TAG = "Home Fragment | "; //FIXME
 
     private ArrayList<Clothes> clothes = WorkClothes.getAllClothes();
     private GridView clothesGridView;
+    private Spinner spinner;
 
-    //номер элемента в gridview. появляется при длительном нажатии
-    private int contextMenuGridPosition;
+    private int contextMenuGridPosition; // номер элемента в gridview. появляется при длительном нажатии
 
     //context menu items:
     public static final int IDM_A = 101; //deleting
-    public static final int IDM_B = 102;
+    public static final int IDM_B = 102; // редактирование
+
+    public static ClothesAdapter clothesAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,12 +61,16 @@ public class HomeFragment extends Fragment {
 
         // получаем элемент GridView
         clothesGridView = (GridView) getActivity().findViewById(R.id.clothes_list);
+        spinner = (Spinner) getActivity().findViewById(R.id.home_filter);
 
-        // загружаем значения с БД (стартовая загрузка)
-        clothesGridView.setAdapter( new ClothesAdapter(getActivity(),
-                R.layout.list_item,
-                clothes
-        ));
+        clothesAdapter = new ClothesAdapter(getActivity(), R.layout.list_item, clothes);
+
+        initGridView();
+        initSpinner();
+    }
+
+    public void initGridView(){
+        clothesGridView.setAdapter(clothesAdapter); // подключаем адаптер со списком значений
 
         //СЛУШАТЕЛЬ ДЛЯ НАЖАТИЙ НА ЭЛЕМЕНТ ТАБЛИЦЫ
         AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
@@ -68,6 +78,7 @@ public class HomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 // получаем выбранный пункт
                 Clothes selectedCloth = (Clothes) parent.getItemAtPosition(position);
+
                 // Создание диалогового окна
                 FragmentManager manager = getFragmentManager();
                 ClothesDialogFragment myDialogFragment = new ClothesDialogFragment(selectedCloth);
@@ -79,30 +90,31 @@ public class HomeFragment extends Fragment {
 
         // подключаем слушатель к итемам
         clothesGridView.setOnItemClickListener(itemListener);
+    }
 
-
-        //------------------------СПИНЕР---------------------------
-        Spinner spinner = (Spinner) getActivity().findViewById(R.id.home_filter);
-
+    public void initSpinner(){
         // Создаем адаптер ArrayAdapter с помощью массива строк и стандартной разметки элемета spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, Clothes.getTypes());
 
         // Определяем разметку для использования при выборе элемента
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);// Применяем адаптер к элементу spinner
-        spinner.setSelection(0); // ставим значение по умолчанию
+        // Применяем адаптер к элементу spinner
+        spinner.setAdapter(adapter);
+        // ставим значение по умолчанию
+        spinner.setSelection(0);
 
-        // получаем выбранное значение в спиннере
         //добавляем к спиннеру слушатель выбранного итема
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View itemSelected,
                                        int selectedItemPosition, long selectedId){
                 String[] choose = Clothes.getTypes();
 
+                // Если выбрано "Всё"
                 if (choose[selectedItemPosition].equals("Все")){
                     clothesGridView.setAdapter(new ClothesAdapter(getActivity(), // отображаем все значения
                             R.layout.list_item, clothes));
+
                     return;
                 }
 
@@ -112,24 +124,33 @@ public class HomeFragment extends Fragment {
 
                 // АЛГОРИТМ ВЫГРУЗКИ ФОТО С ВЫБРАННЫМ ТИПОМ
                 ArrayList<Clothes> selectedTypeClothes = new ArrayList<>(); // новый список одежды (выбранного типа!)
-                for (Clothes el: //проходим по каждому элементу списка одежды
-                     clothes) {
-                    if (el.getType().equals(choose[selectedItemPosition])) // если тип одежды этого элемента совпадает с выбранным
+
+                // проходим по каждому элементу списка одежды
+                for (Clothes el:
+                        clothes) {
+                    // если тип одежды этого элемента совпадает с выбранным
+                    if (el.getType().equals(choose[selectedItemPosition]))
                         selectedTypeClothes.add(el); // добалвяем
                 }
-                clothesGridView.setAdapter(new ClothesAdapter(getActivity(), // отображаем новую таблицу
+
+                // отображаем новую таблицу
+                clothesGridView.setAdapter(new ClothesAdapter(getActivity(),
                         R.layout.list_item, selectedTypeClothes));
             }
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        //------------------------END_СПИНЕР---------------------------
     }
 
+    /**
+     * Контекстное меню, которое вызывается при зажатии на элементе одежды.
+     * Содержит удаление и редактирование
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(Menu.NONE, IDM_B, Menu.NONE, "Редактировать");
         menu.add(Menu.NONE, IDM_A, Menu.NONE, "Удалить");
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
@@ -151,12 +172,19 @@ public class HomeFragment extends Fragment {
                 MainActivity.dbHelper.deleteCloth(contextMenuGridPosition + 1); // удаляем из БД
                 WorkClothes.update(); // обновляем список
 
-                // отображаем новую таблицу
-                clothesGridView.setAdapter(new ClothesAdapter(getActivity(), // FIXME change
-                        R.layout.list_item, WorkClothes.getAllClothes()));
+                HomeFragment.clothesAdapter.notifyDataSetChanged(); // оповещаем об изменениях данных
+                clothesGridView.invalidateViews(); // обновляем gridView
 
                 Toast.makeText(getActivity(), "Удаление завершено", Toast.LENGTH_LONG)
                         .show();
+
+                return true;
+
+            case IDM_B: // редактировать
+                AddingClothesFragment clothesFragment = new AddingClothesFragment(
+                        "Редактировать одежду", contextMenuGridPosition);
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                clothesFragment.show(manager, "dialog");
 
                 return true;
         }

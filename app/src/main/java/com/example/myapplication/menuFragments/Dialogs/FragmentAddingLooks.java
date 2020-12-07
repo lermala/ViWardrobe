@@ -21,6 +21,9 @@ import com.example.myapplication.R;
 
 import java.util.Calendar;
 
+/**
+ * Фрагмент добавления/редактирования лука (В РАЗРАБОТКЕ)
+ */
 public class FragmentAddingLooks extends DialogFragment {
 
     private Button btnDatePicker;

@@ -12,8 +12,11 @@ import android.widget.TextView;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.Logic.workWithClothes.Data.WorkClothes;
+import com.example.myapplication.Logic.workWithClothes.WorkClothes;
 
+/**
+ * Фрагмент "профиль"
+ */
 public class ProfileFragment extends Fragment {
 
     TextView txtName, txtMail, txtDate;
@@ -22,7 +25,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         getActivity().setTitle("Профиль");
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }

@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * В РАЗРАБОТКЕ
+ */
 public class UserDBHelper extends SQLiteOpenHelper {
 
     //TODO: ЭТО ПОКА НЕ НУЖНО

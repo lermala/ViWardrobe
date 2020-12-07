@@ -2,20 +2,11 @@ package com.example.myapplication.Logic.workWithClothes;
 
 import android.net.Uri;
 
-import com.example.myapplication.Logic.Tags;
-
 public class Clothes{
 
-    //----ОСНОВНЫЕ ПОЛЯ-----
     private String name;
     private String type;
-    private int image;
-   // private String imageUriString;
-    private String imageUriString;
-
     private Uri imageUri;
-    //----------------------
-
 
     public Uri getImageUri() {
         return imageUri;
@@ -44,8 +35,6 @@ public class Clothes{
         this.imageUri = imageUri;
     }
 
-    //--------------------------------
-
     public String getName() {
         return name;
     }
@@ -54,25 +43,12 @@ public class Clothes{
         return type;
     }
 
-    public int getImage() {
-        return image;
-    }
-
-    public String getImageUriString() {
-        return imageUriString;
-    }
-
-
     public void setName(String name) {
         this.name = name;
     }
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public void setImage(int image) {
-        this.image = image;
     }
 
     public static String[] getTypes() {
@@ -83,8 +59,8 @@ public class Clothes{
     public String toString() {
         return "Clothes{" +
                 "name='" + name + '\'' +
-                ", type='" + type + '\'' + imageUriString +
+                ", type='" + type + '\'' +
+                ", imageUri=" + imageUri +
                 '}';
     }
-
 }

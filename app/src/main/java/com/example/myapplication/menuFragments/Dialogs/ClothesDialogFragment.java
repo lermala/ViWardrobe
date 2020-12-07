@@ -47,10 +47,10 @@ public class ClothesDialogFragment extends DialogFragment {
         builder.setTitle("Просмотр"); // можно заменить на название предмета одежды clothes.getName()
         builder.setPositiveButton("ОК", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // Закрываем окно
                 dialog.cancel();
             }
         });
+
         return builder.create();
     }
 }

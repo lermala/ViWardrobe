@@ -7,21 +7,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.myapplication.Logic.UsersPack.User;
-import com.example.myapplication.Logic.workWithClothes.Clothes;
-import com.example.myapplication.Logic.workWithLooks.LookAdapter;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 
 import static com.example.myapplication.MainActivity.APP_PREFERENCES_NAME;
 
+/**
+ * Фрагмент регистрации пользователя или редактирования его данных
+ */
 public class LoginFragment extends Fragment{
 
     EditText txtName, txtMail, txtDate;
@@ -50,6 +47,10 @@ public class LoginFragment extends Fragment{
         }
     }
 
+    /**
+     * получить данные пользователя
+     * @return null - некорректный ввод
+     */
     public User getUserData(){
         String name = txtName.getText().toString();
         String mail = txtMail.getText().toString();

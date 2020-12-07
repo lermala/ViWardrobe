@@ -13,6 +13,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.myapplication.R;
 
+/**
+ * (В РАЗРАБОТКЕ) ПОКА НЕ НУЖЕН
+ */
 public class TagsDialogFragment extends DialogFragment {
     @NonNull
     @Override

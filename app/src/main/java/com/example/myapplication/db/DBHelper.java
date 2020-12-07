@@ -1,4 +1,4 @@
-package com.example.myapplication.Logic.workWithClothes.Data;
+package com.example.myapplication.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -79,6 +79,31 @@ public class DBHelper extends SQLiteOpenHelper {
         database.close();
     }
 
+    public void writeToDataBase(String name, String type, String imageUri, int id){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        // подготовим данные для вставки в виде пар: наименование столбца - значение
+        contentValues.put(DBHelper.KEY_NAME, name);
+        contentValues.put(DBHelper.KEY_TYPE, type);
+        contentValues.put(DBHelper.KEY_PICTURE, imageUri.toString());
+
+        Log.d( "mLog", "name = " + name +
+                ", type = " + type +
+                ", picture = " + imageUri.toString());
+
+        // вставляем запись
+        database.insert(DBHelper.TABLE_CLOTHES, null, contentValues);
+
+        Log.d("mLog", "ROW INSERTED " +
+                "name = " + contentValues.get(DBHelper.KEY_NAME) +
+                ", type = " + contentValues.get(DBHelper.KEY_TYPE) +
+                ", picture = " + contentValues.get(DBHelper.KEY_PICTURE)
+        );
+
+        database.close();
+    }
+
     public ArrayList<Clothes> readAllFromDataBase(){
         ArrayList<Clothes> clothesList = new ArrayList<Clothes>();
         // подключаемся к БД
@@ -98,7 +123,7 @@ public class DBHelper extends SQLiteOpenHelper {
                         Uri.parse(cursor.getString(NUM_COLUMN_PICTURE))
                 );
 
-                Log.d("mLog", "READING ALL:\nID = " + cursor.getInt(0) +
+                Log.d("DBHELPER |   ", "READING ALL:\nID = " + cursor.getInt(0) +
                         ", name = " + cursor.getString(1) +
                         ", type = " + cursor.getString(2) +
                         ", picture = " + cursor.getString(3));
@@ -110,6 +135,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return clothesList;
     }
+
+
 
     public Clothes getCloth(int id){
         SQLiteDatabase db = this.getReadableDatabase();
@@ -132,16 +159,18 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // Метод редактирования строки в БД
-    public int updateCloth(Clothes newCloth, int id){
-        SQLiteDatabase db = this.getWritableDatabase();
+    public void updateCloth(Clothes newCloth, int id){
+        SQLiteDatabase db = this.getReadableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(DBHelper.KEY_NAME, newCloth.getName());
         contentValues.put(DBHelper.KEY_TYPE, newCloth.getType());
-        contentValues.put(DBHelper.KEY_PICTURE, newCloth.getImageUriString());
+        contentValues.put(DBHelper.KEY_PICTURE, newCloth.getImageUri().toString());
 
-        return db.update(TABLE_CLOTHES, contentValues, KEY_ID + " = ?",
+        int updCount = db.update(TABLE_CLOTHES, contentValues, KEY_ID + " = ?",
                 new String[] { String.valueOf(id) });
+
+        Log.d("mLog", "updates rows count = " + updCount);
     }
 
     public void deleteCloth(int id) {
