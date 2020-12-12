@@ -79,31 +79,6 @@ public class DBHelper extends SQLiteOpenHelper {
         database.close();
     }
 
-    public void writeToDataBase(String name, String type, String imageUri, int id){
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-
-        // подготовим данные для вставки в виде пар: наименование столбца - значение
-        contentValues.put(DBHelper.KEY_NAME, name);
-        contentValues.put(DBHelper.KEY_TYPE, type);
-        contentValues.put(DBHelper.KEY_PICTURE, imageUri.toString());
-
-        Log.d( "mLog", "name = " + name +
-                ", type = " + type +
-                ", picture = " + imageUri.toString());
-
-        // вставляем запись
-        database.insert(DBHelper.TABLE_CLOTHES, null, contentValues);
-
-        Log.d("mLog", "ROW INSERTED " +
-                "name = " + contentValues.get(DBHelper.KEY_NAME) +
-                ", type = " + contentValues.get(DBHelper.KEY_TYPE) +
-                ", picture = " + contentValues.get(DBHelper.KEY_PICTURE)
-        );
-
-        database.close();
-    }
-
     public ArrayList<Clothes> readAllFromDataBase(){
         ArrayList<Clothes> clothesList = new ArrayList<Clothes>();
         // подключаемся к БД
@@ -136,7 +111,21 @@ public class DBHelper extends SQLiteOpenHelper {
         return clothesList;
     }
 
+    public void logCheck(){
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.query(DBHelper.TABLE_CLOTHES, null, null,
+                null, null, null, null);
 
+        if (cursor.moveToFirst()){
+            do {
+                Log.d("DBHELPER |   ", "READING ALL:\nID = " + cursor.getInt(0) +
+                        ", name = " + cursor.getString(1) +
+                        ", type = " + cursor.getString(2) +
+                        ", picture = " + cursor.getString(3));
+            } while (cursor.moveToNext());
+        } else
+            Log.d("mLog","0 rows");
+    }
 
     public Clothes getCloth(int id){
         SQLiteDatabase db = this.getReadableDatabase();

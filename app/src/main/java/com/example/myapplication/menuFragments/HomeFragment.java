@@ -163,16 +163,33 @@ public class HomeFragment extends Fragment {
             case IDM_A:
                 // TODO: добавить "Точно ли хотите удалить?" да/нет
 
+                Clothes clothForDel = WorkClothes.getClothes(contextMenuGridPosition);
+
                 FileWork fileWork = new FileWork(getContext());
-                fileWork.deleteImage(WorkClothes.getClothes(contextMenuGridPosition)
-                        .getImageUri()); // удаляем картинку из папки
+                fileWork.deleteImage(clothForDel.getImageUri()); // удаляем картинку из папки
 
                 Log.d("Files", "contextMenuGridPosition=" + contextMenuGridPosition); // FIXME delete
 
-                MainActivity.dbHelper.deleteCloth(contextMenuGridPosition + 1); // удаляем из БД
-                WorkClothes.update(); // обновляем список
+                Log.d("CHECK ", " | before "); // FIXME delete
+                for (Clothes el:
+                        clothesAdapter.getClothes()) {
+                    Log.d("CHECK ", el.toString() + " | "); // FIXME delete
+                }
 
-                HomeFragment.clothesAdapter.notifyDataSetChanged(); // оповещаем об изменениях данных
+                MainActivity.dbHelper.deleteCloth(contextMenuGridPosition + 1); // удаляем из БД
+                //HomeFragment.clothesAdapter.remove(clothForDel);
+                clothesAdapter.remove(clothesAdapter.getItem(contextMenuGridPosition));
+                WorkClothes.update(); // обновляем список
+                clothesAdapter.notifyDataSetChanged(); // оповещаем об изменениях данных
+
+                //this.clothesAdapter.notifyDataSetChanged(); // оповещаем об изменениях данных
+
+                Log.d("CHECK ", " | after "); // FIXME delete
+                for (Clothes el:
+                     clothesAdapter.getClothes()) {
+                    Log.d("CHECK ", el.toString() + " | "); // FIXME delete
+                }
+
                 clothesGridView.invalidateViews(); // обновляем gridView
 
                 Toast.makeText(getActivity(), "Удаление завершено", Toast.LENGTH_LONG)

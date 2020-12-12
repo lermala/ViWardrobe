@@ -239,7 +239,7 @@ public class AddingClothesFragment extends DialogFragment {
      */
     private String checkDataFromView(View view){
         String message = "";
-        if (selectedImageUri == null) //если картинка не выбрана
+        if (selectedImageUri == null && idForEdit == -1) //если картинка не выбрана и сейчас не редактирование
             message = "Выберите фото!";
 
         String name = textViewName.getText().toString();

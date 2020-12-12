@@ -70,8 +70,7 @@ public class MainActivity extends AppCompatActivity {
         fileWork.logCheck();
         //fileWork.deleteAllImagesClothes();
 
-        //addFirstFragment();
-        openFragment(new HomeFragment());
+        openFirstFragment(new HomeFragment());
     }
 
     private void openFragment(Fragment fragment){
@@ -79,8 +78,17 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction ft = fm.beginTransaction();
 
         ft.replace(R.id.container, fragment);
-        ft.addToBackStack(null);
         ft.commit();
+        ft.addToBackStack(null);
+    }
+
+    private void openFirstFragment(Fragment fragment){
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+        ft.replace(R.id.container, fragment);
+        ft.commit();
+       // ft.addToBackStack(null);
     }
 
     // открытие диалогового окна для добавления ЛУКОВ
@@ -123,12 +131,6 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new ProfileFragment();
                 break;
         }
-
-        /*FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.container, fragment);
-        ft.addToBackStack(null);
-        ft.commit();*/
         openFragment(fragment);
     }
 
@@ -169,4 +171,16 @@ public class MainActivity extends AppCompatActivity {
         openFragment(loginFragment);
     }
 
+    @Override
+    public void onBackPressed() {
+        if(getFragmentManager().getBackStackEntryCount() == 0) {
+            super.onBackPressed();
+        }
+        else if(getFragmentManager().getBackStackEntryCount() == 1) {
+            moveTaskToBack(false);
+        }
+        else {
+            getFragmentManager().popBackStack();
+        }
+    }
 }

@@ -34,4 +34,8 @@ public class ClothesAdapter extends ArrayAdapter<Clothes> {
         flagView.setImageURI(cloth.getImageUri());
         return view;
     }
+
+    public ArrayList<Clothes> getClothes() {
+        return clothes;
+    }
 }
