@@ -13,7 +13,7 @@ public class ClothesAdapter extends ArrayAdapter<Clothes> {
 
     private static final String TAG = " ADapter clothes | ";
 
-    private LayoutInflater inflater;
+    private LayoutInflater inflater; //  для создания нового объекта Layout
     private int layout;
     private ArrayList<Clothes> clothes;
 

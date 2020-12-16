@@ -1,7 +1,4 @@
 package com.example.myapplication.Logic.UsersPack;
-
-import android.net.Uri;
-
 public class User {
     private String name;
     private String mail;

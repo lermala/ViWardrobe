@@ -42,7 +42,6 @@ public class FileWork {
 
     public void createDirectoryAndSaveFile(Bitmap imageToSave, String fileName){
         File file = new File(new File(PATH_CLOTHES.toString()), fileName);
-        //File file = new File(new File(path + "/Clothes/"), fileName);
 
         if (file.exists()) {
             file.delete();

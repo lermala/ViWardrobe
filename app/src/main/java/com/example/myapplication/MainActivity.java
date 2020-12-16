@@ -70,7 +70,12 @@ public class MainActivity extends AppCompatActivity {
         fileWork.logCheck();
         //fileWork.deleteAllImagesClothes();
 
-        openFirstFragment(new HomeFragment());
+        //openFirstFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+        ft.replace(R.id.container, new HomeFragment());
+        ft.commit();
     }
 
     private void openFragment(Fragment fragment){
